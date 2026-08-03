@@ -35,11 +35,8 @@ RUN composer install --no-dev --optimize-autoloader --ignore-platform-reqs
 # İzinleri ayarla
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Çalıştırma scripti (Migrate, Seed ve FPM başlatma)
-CMD php artisan key:generate --force && \
-    php artisan migrate --force && \
-    php artisan db:seed --force && \
-    php artisan storage:link --force && \
-    php artisan config:cache && \
-    php artisan route:cache && \
-    php-fpm
+# Entrypoint script kopyala ve izin ver
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
