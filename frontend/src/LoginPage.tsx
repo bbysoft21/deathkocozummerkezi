@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Shield, Mail, Lock, Eye, EyeOff, Sparkles, CheckCircle2, AlertCircle, ArrowRight, Server } from 'lucide-react';
 import axios from 'axios';
+import faviconLogo from '../public/favicon.webp';
 
 interface LoginPageProps {
   onLoginSuccess: (user: any) => void;
@@ -132,7 +133,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
             {/* Mobile Header Title */}
             <div className="text-center mb-8">
               <div className="inline-flex p-2.5 rounded-2xl bg-slate-900/90 border border-amber-500/40 shadow-xl shadow-amber-500/10 mb-3 ring-4 ring-amber-500/10 backdrop-blur-md">
-                <img src="/favicon.webp" alt="DeathKO Logo" className="w-12 h-12 object-contain rounded-xl" />
+                <img src={faviconLogo} alt="DeathKO Logo" className="w-12 h-12 object-contain rounded-xl" />
               </div>
               <h2 className="text-2xl font-bold text-white tracking-wide">Yönetici Girişi</h2>
               <p className="text-xs text-slate-400 mt-1">Lütfen yetkili hesabınızla giriş yapın</p>
@@ -237,7 +238,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 via-amber-600 to-yellow-600 hover:from-amber-400 hover:to-yellow-500 text-slate-950 font-bold text-sm tracking-wide transition-all duration-200 shadow-lg shadow-amber-500/20 active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2 mt-2 cursor-pointer"
+                  className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-emerald-500 via-emerald-600 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-extrabold text-sm tracking-wide transition-all duration-200 shadow-lg shadow-emerald-500/20 active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2 mt-2 cursor-pointer"
                 >
                   {loading ? (
                     <div className="w-5 h-5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
