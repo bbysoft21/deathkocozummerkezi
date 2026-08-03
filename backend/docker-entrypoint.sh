@@ -20,6 +20,5 @@ echo "Caching config & routes..."
 php artisan config:cache || true
 php artisan route:cache || true
 
-echo "Starting Nginx and PHP-FPM..."
-nginx
-exec php-fpm
+echo "Starting Apache Web Server..."
+exec apache2-foreground

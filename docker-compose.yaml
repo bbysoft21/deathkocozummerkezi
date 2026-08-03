@@ -37,7 +37,7 @@ services:
     volumes:
       - backend_storage:/var/www/html/storage/app/public
     expose:
-      - "9000"
+      - "80"
     depends_on:
       - database
     networks:

@@ -1,18 +1,14 @@
-FROM php:8.2-fpm
+FROM php:8.2-apache
 
-# Çalışma dizini
-WORKDIR /var/www/html
+# ModRewrite Aktifleştir
+RUN a2enmod rewrite
 
-# Gerekli sistem paketleri ve PHP eklentileri
+# Gerekli paketler ve PHP extension'ları
 RUN apt-get update && apt-get install -y \
-    build-essential \
     libpng-dev \
     libjpeg62-turbo-dev \
     libfreetype6-dev \
-    locales \
     zip \
-    jpegoptim optipng pngquant gifsicle \
-    vim \
     unzip \
     git \
     curl \
@@ -22,13 +18,20 @@ RUN apt-get update && apt-get install -y \
 
 RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath gd
 
+# Apache DocumentRoot Ayarı (/var/www/html/public)
+ENV APACHE_DOCUMENT_ROOT /var/www/html/public
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+
+WORKDIR /var/www/html
+
 # Composer Kurulumu
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Proje dosyalarını kopyala
 COPY . /var/www/html
 
-# Bağımlılıkları yükle (Platform gereksinimlerini ve root uyarısını yoksay)
+# Bağımlılıkları yükle
 ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN composer install --no-dev --optimize-autoloader --ignore-platform-reqs
 
@@ -39,6 +42,6 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-# Port ve Entrypoint
-EXPOSE 9000
+EXPOSE 80
+
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
