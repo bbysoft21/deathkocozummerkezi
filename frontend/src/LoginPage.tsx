@@ -77,16 +77,16 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
         >
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-semibold tracking-wider uppercase backdrop-blur-md">
             <Sparkles className="w-4 h-4 text-amber-400" />
-            <span>DeathKO Co-Züm Merkezi</span>
+            <span>DeathKO Çözüm Merkezi</span>
           </div>
 
           <h1 className="text-4xl xl:text-5xl font-extrabold tracking-tight text-white leading-tight">
-            Yönetim & Destek Portalına <br />
+            Yetkili & Yönetim Portalına <br />
             <span className="text-gradient-gold">Hoş Geldiniz</span>
           </h1>
 
           <p className="text-slate-400 text-base leading-relaxed">
-            Knight Online ve Metin2 gibi büyük MMORPG oyun sunucularınızın tüm destek taleplerini, canlı işlemlerini ve veritabanı akışlarını tek bir noktadan yönetin.
+            DeathKO Knight Online sunucularının tüm yetkili taleplerini, canlı oyun içi sorun bildirimlerini, görev ve veritabanı akışlarını tek bir güvenli panelden yönetin.
           </p>
 
           {/* Feature Badges */}
