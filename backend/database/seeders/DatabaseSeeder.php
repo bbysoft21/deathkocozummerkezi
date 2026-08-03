@@ -101,50 +101,5 @@ class DatabaseSeeder extends Seeder
         $cat5 = TicketCategory::updateOrCreate(['slug' => 'database-sorunlari'], ['uuid' => (string) Str::uuid(), 'name' => 'Database Sorunları', 'description' => 'Veritabanı, karakter, eşya kaybı ve DB kayıt hataları']);
         $cat6 = TicketCategory::updateOrCreate(['slug' => 'damage-sorunlari'], ['uuid' => (string) Str::uuid(), 'name' => 'Damage Sorunları', 'description' => 'Skill, silah, zırh ve karakter hasar/damage dengesizliği bildirimleri']);
         $cat7 = TicketCategory::updateOrCreate(['slug' => 'rehber-forum-sorunu'], ['uuid' => (string) Str::uuid(), 'name' => 'Rehber Forum Sorunu', 'description' => 'Forum rehberleri, içerik güncellemeleri ve forum sorun bildirimleri']);
-
-        // Sample Tickets for Firedrake Solution Center
-        Ticket::create([
-            'uuid' => (string) Str::uuid(),
-            'ticket_category_id' => $cat1->id,
-            'user_id' => $gmUser->id,
-            'assigned_to_id' => $dbEditor->id,
-            'subject' => 'Firedrake Görev Ödülü Yüklenmedi',
-            'message' => 'Firedrake sunucusundaki 70 görevini bitirmeme rağmen ödül kutusu envanterime gelmedi.',
-            'solution_center' => 'firedrake',
-            'priority' => 'high',
-            'status' => 'open',
-        ]);
-
-        // Sample Tickets for Myko Solution Center
-        Ticket::create([
-            'uuid' => (string) Str::uuid(),
-            'ticket_category_id' => $cat3->id,
-            'user_id' => $gmUser->id,
-            'assigned_to_id' => $dmgEditor->id,
-            'subject' => 'Myko KC Bakiyem Hesaba Geçmedi',
-            'message' => 'Myko çözüm merkezine özel satın aldığım 2000 KC kodu yükleme sonrası hata verdi.',
-            'solution_center' => 'myko',
-            'priority' => 'urgent',
-            'status' => 'in_progress',
-            'assigned_at' => now()->subMinutes(30),
-        ]);
-
-        // Sample Tickets for Light Farm Solution Center
-        Ticket::create([
-            'uuid' => (string) Str::uuid(),
-            'ticket_category_id' => $cat4->id,
-            'user_id' => $gmUser->id,
-            'assigned_to_id' => $guideEditor->id,
-            'resolved_by_id' => $guideEditor->id,
-            'subject' => 'Light Farm Client DC Sorunu',
-            'message' => 'Light Farm zindan bölgesine girince client aniden kapanıyor.',
-            'solution_center' => 'light-farm',
-            'priority' => 'medium',
-            'status' => 'resolved',
-            'admin_response' => 'Güncelleme paketi yayınlandı, sorun giderildi.',
-            'assigned_at' => now()->subHours(2),
-            'in_progress_at' => now()->subHours(1)->subMinutes(30),
-            'resolved_at' => now()->subMinutes(15),
-        ]);
     }
 }

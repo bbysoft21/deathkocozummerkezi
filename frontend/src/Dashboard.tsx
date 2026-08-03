@@ -602,9 +602,9 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                     <Coins className="w-4 h-4 text-emerald-400" />
                     <span>Light Farm Çözüm</span>
                   </span>
-                  {stats.centers && stats.centers['light-farm'] > 0 && (
+                  {stats.centers && (stats.centers['light-farm'] > 0 || (stats.centers as any).light_farm > 0) && (
                     <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-[10px] font-bold animate-pulse flex items-center gap-1">
-                      ⚠️ {stats.centers['light-farm']}
+                      ⚠️ {stats.centers['light-farm'] || (stats.centers as any).light_farm}
                     </span>
                   )}
                 </button>
