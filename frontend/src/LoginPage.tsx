@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Shield, Mail, Lock, Eye, EyeOff, Gamepad2, Sparkles, CheckCircle2, AlertCircle, ArrowRight, Server } from 'lucide-react';
+import { Shield, Mail, Lock, Eye, EyeOff, Sparkles, CheckCircle2, AlertCircle, ArrowRight, Server } from 'lucide-react';
 import axios from 'axios';
 
 interface LoginPageProps {
