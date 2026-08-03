@@ -20,5 +20,6 @@ echo "Caching config & routes..."
 php artisan config:cache || true
 php artisan route:cache || true
 
-echo "Starting PHP-FPM..."
+echo "Starting Nginx and PHP-FPM..."
+nginx
 exec php-fpm
