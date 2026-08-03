@@ -48,6 +48,8 @@ services:
       dockerfile: Dockerfile
     container_name: deathko_frontend
     restart: always
+    ports:
+      - "8080:80"
     expose:
       - "80"
     depends_on:
