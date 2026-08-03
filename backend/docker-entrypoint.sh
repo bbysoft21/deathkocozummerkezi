@@ -1,24 +1,17 @@
 #!/bin/sh
-set -e
 
-echo "Waiting for database to be ready..."
-sleep 5
+echo "Waiting for MySQL database connection..."
+until php -r "try { new PDO('mysql:host='.getenv('DB_HOST').';dbname='.getenv('DB_DATABASE'), getenv('DB_USERNAME'), getenv('DB_PASSWORD')); echo 'connected'; } catch (Exception \$e) { exit(1); }" > /dev/null 2>&1; do
+    echo "MySQL is unavailable - sleeping 3s..."
+    sleep 3
+done
 
-echo "Generating APP_KEY if missing..."
+echo "MySQL is up and running!"
+
 php artisan key:generate --force || true
-
-echo "Running migrations..."
 php artisan migrate --force || true
-
-echo "Running seeders..."
 php artisan db:seed --force || true
-
-echo "Linking storage..."
 php artisan storage:link --force || true
-
-echo "Caching config & routes..."
-php artisan config:cache || true
-php artisan route:cache || true
 
 echo "Starting Apache Web Server..."
 exec apache2-foreground
