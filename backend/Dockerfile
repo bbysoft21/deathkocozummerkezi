@@ -1,0 +1,44 @@
+FROM php:8.2-fpm
+
+# Çalışma dizini
+WORKDIR /var/www/html
+
+# Gerekli sistem paketleri ve PHP eklentileri
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libpng-dev \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
+    locales \
+    zip \
+    jpegoptim optipng pngquant gifsicle \
+    vim \
+    unzip \
+    git \
+    curl \
+    libonig-dev \
+    libxml2-dev \
+    libzip-dev
+
+RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath gd
+
+# Composer Kurulumu
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Proje dosyalarını kopyala
+COPY . /var/www/html
+
+# Bağımlılıkları yükle
+RUN composer install --no-dev --optimize-autoloader
+
+# İzinleri ayarla
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+
+# Çalıştırma scripti (Migrate, Seed ve FPM başlatma)
+CMD php artisan key:generate --force && \
+    php artisan migrate --force && \
+    php artisan db:seed --force && \
+    php artisan storage:link --force && \
+    php artisan config:cache && \
+    php artisan route:cache && \
+    php-fpm
