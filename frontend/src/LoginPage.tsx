@@ -131,8 +131,8 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
 
             {/* Mobile Header Title */}
             <div className="text-center mb-8">
-              <div className="inline-flex p-3 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 mb-3 shadow-lg shadow-amber-500/5">
-                <Gamepad2 className="w-8 h-8" />
+              <div className="inline-flex p-2.5 rounded-2xl bg-slate-900/90 border border-amber-500/40 shadow-xl shadow-amber-500/10 mb-3 ring-4 ring-amber-500/10 backdrop-blur-md">
+                <img src="/favicon.webp" alt="DeathKO Logo" className="w-12 h-12 object-contain rounded-xl" />
               </div>
               <h2 className="text-2xl font-bold text-white tracking-wide">Yönetici Girişi</h2>
               <p className="text-xs text-slate-400 mt-1">Lütfen yetkili hesabınızla giriş yapın</p>
