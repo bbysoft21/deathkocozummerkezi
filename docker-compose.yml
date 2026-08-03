@@ -36,6 +36,8 @@ services:
       DB_PASSWORD: ${DB_PASSWORD:-deathko_pass123!}
     volumes:
       - backend_storage:/var/www/html/storage/app/public
+    expose:
+      - "9000"
     depends_on:
       - database
     networks:
