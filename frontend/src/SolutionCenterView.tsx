@@ -348,7 +348,7 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
         <div className="flex items-center gap-3 w-full md:w-auto">
           <button 
             onClick={() => setIsModalOpen(true)}
-            className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 text-xs font-bold transition-all shadow-lg shadow-amber-500/20 cursor-pointer"
+            className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold transition-all shadow-lg shadow-emerald-900/20 cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>Yeni Sorun Bildirimi</span>
@@ -930,7 +930,7 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold transition-all cursor-pointer"
+                  className="px-5 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold transition-all cursor-pointer"
                 >
                   {submitting ? 'Gönderiliyor...' : 'Bildirimi Gönder'}
                 </button>
@@ -1000,55 +1000,70 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
 
             {/* Kartı Başka Adminde Devretme Alanı */}
             {['super_admin', 'admin', 'damage_editor', 'guide_editor'].includes(currentUser.role) && (
-              <div className="p-3.5 rounded-2xl bg-cyan-950/30 border border-cyan-500/20 space-y-2">
-                <label className="block text-xs font-semibold text-cyan-300 flex items-center justify-between">
-                  <span>Kartı Başka Bir Admin / Yetkiliye Devret 🔄</span>
-                  <span className="text-[10px] text-cyan-400/80 font-normal">Devredildiği andan itibaren devredilen yetkilinin rapor süresi başlar</span>
-                </label>
-                <div className="flex items-center gap-2">
-                  <select
-                    value={reassignTargetId}
-                    onChange={(e) => setReassignTargetId(e.target.value)}
-                    className="flex-1 px-3 py-2 rounded-xl bg-[#1a1d1e] border border-[#2a2f34] text-xs text-slate-200 focus:outline-none focus:border-cyan-500"
-                  >
-                    <option value="">Devredilecek Admin / Yetkili Seçin...</option>
-                    {assignableUsers.map((u) => (
-                      <option key={u.id} value={u.id}>
-                        {u.name} ({u.role === 'admin' ? 'Db Editör' : u.role === 'damage_editor' ? 'Damage Sorumlusu' : u.role === 'guide_editor' ? 'Rehber Sorumlusu' : 'Yönetici'})
-                      </option>
-                    ))}
-                  </select>
-                  <button
-                    type="button"
-                    onClick={handleReassign}
-                    disabled={!reassignTargetId || isReassigning}
-                    className="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 disabled:opacity-50 text-white text-xs font-bold transition-all cursor-pointer shrink-0 shadow-md"
-                  >
-                    {isReassigning ? 'Devrediliyor...' : 'Kartı Devret'}
-                  </button>
+              selectedTicket.status === 'resolved' || selectedTicket.status === 'closed' ? (
+                <div className="p-3.5 rounded-2xl bg-[#1a1d1e]/50 border border-[#2a2f34]/50 space-y-2 opacity-70">
+                  <label className="block text-xs font-semibold text-slate-400 flex items-center justify-between">
+                    <span>Kartı Devretme (Kilitli) 🔒</span>
+                  </label>
+                  <p className="text-[10px] text-slate-500">Bu bildirim çözüldüğü için artık başka bir yetkiliye devredilemez.</p>
                 </div>
-              </div>
+              ) : (
+                <div className="p-3.5 rounded-2xl bg-cyan-950/30 border border-cyan-500/20 space-y-2">
+                  <label className="block text-xs font-semibold text-cyan-300 flex items-center justify-between">
+                    <span>Kartı Başka Bir Admin / Yetkiliye Devret 🔄</span>
+                    <span className="text-[10px] text-cyan-400/80 font-normal">Devredildiği andan itibaren devredilen yetkilinin rapor süresi başlar</span>
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <select
+                      value={reassignTargetId}
+                      onChange={(e) => setReassignTargetId(e.target.value)}
+                      className="flex-1 px-3 py-2 rounded-xl bg-[#1a1d1e] border border-[#2a2f34] text-xs text-slate-200 focus:outline-none focus:border-cyan-500"
+                    >
+                      <option value="">Devredilecek Admin / Yetkili Seçin...</option>
+                      {assignableUsers.map((u) => (
+                        <option key={u.id} value={u.id}>
+                          {u.name} ({u.role === 'admin' ? 'Db Editör' : u.role === 'damage_editor' ? 'Damage Sorumlusu' : u.role === 'guide_editor' ? 'Rehber Sorumlusu' : 'Yönetici'})
+                        </option>
+                      ))}
+                    </select>
+                    <button
+                      type="button"
+                      onClick={handleReassign}
+                      disabled={!reassignTargetId || isReassigning}
+                      className="px-4 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-600 disabled:opacity-50 text-white text-xs font-bold transition-all cursor-pointer shrink-0 shadow-md"
+                    >
+                      {isReassigning ? 'Devrediliyor...' : 'Kartı Devret'}
+                    </button>
+                  </div>
+                </div>
+              )
             )}
 
             {/* Quick Status Buttons */}
             <div className="flex items-center justify-between gap-2 pt-2">
               {currentUser.role === 'super_admin' ? (
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => handleUpdateStatus('in_progress')}
-                    disabled={updatingStatus}
-                    className="px-3.5 py-2 rounded-xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 text-xs font-bold hover:bg-cyan-500/30 cursor-pointer transition-all"
-                  >
-                    {updatingStatus ? 'Güncelleniyor...' : 'İşleme Al'}
-                  </button>
-                  <button
-                    onClick={() => handleUpdateStatus('resolved')}
-                    disabled={updatingStatus}
-                    className="px-3.5 py-2 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-bold hover:bg-emerald-500/30 cursor-pointer transition-all"
-                  >
-                    {updatingStatus ? 'Güncelleniyor...' : 'Çözüldü İşaretle'}
-                  </button>
-                </div>
+                selectedTicket.status === 'resolved' || selectedTicket.status === 'closed' ? (
+                  <div className="text-xs text-emerald-400/90 font-medium bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-xl">
+                    ✅ Bu bildirim çözüldüğü için işlem statüsü kilitlendi.
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => handleUpdateStatus('in_progress')}
+                      disabled={updatingStatus}
+                      className="px-3.5 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold cursor-pointer transition-all"
+                    >
+                      {updatingStatus ? 'Güncelleniyor...' : 'İşleme Al'}
+                    </button>
+                    <button
+                      onClick={() => handleUpdateStatus('resolved')}
+                      disabled={updatingStatus}
+                      className="px-3.5 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold cursor-pointer transition-all"
+                    >
+                      {updatingStatus ? 'Güncelleniyor...' : 'Çözüldü İşaretle'}
+                    </button>
+                  </div>
+                )
               ) : (
                 <div className="text-xs text-amber-400/90 font-medium bg-amber-500/10 border border-amber-500/20 px-3 py-1.5 rounded-xl">
                   ⚠️ Kartları işleme alma yetkisi yalnızca Süper Admin hesabı için geçerlidir.
