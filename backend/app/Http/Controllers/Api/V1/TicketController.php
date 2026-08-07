@@ -430,30 +430,50 @@ class TicketController extends Controller
             ];
         });
 
-        // 2. Yetkili Bazında İlerleme / Gerileme Analizi (Süper Admin Hariç: Db Editör, Damage Sorumlusu, Rehber Sorumlusu vb.)
-        $staffMembers = \App\Models\User::whereIn('role', ['admin', 'damage_editor', 'guide_editor'])->get();
+        // 2. Yetkili Bazında İlerleme / Gerileme Analizi (Sadece Db Editörleri)
+        $staffMembers = \App\Models\User::where('role', 'admin')->get();
 
         $staffPerformance = $staffMembers->map(function ($staff) use ($thisWeekStart, $lastWeekStart, $lastWeekEnd, $thisMonthStart) {
+            // Sadece bu yetkiliye atanan biletler
+            $staffTickets = Ticket::where('assigned_to_id', $staff->id)->get();
+
             // Bu Hafta Çözülenler
-            $thisWeekResolved = Ticket::where('assigned_to_id', $staff->id)
-                ->whereIn('status', ['resolved', 'closed'])
-                ->where('resolved_at', '>=', $thisWeekStart)
-                ->get();
+            $thisWeekResolved = $staffTickets
+                ->filter(fn($t) => in_array($t->status, ['resolved', 'closed']) && $t->resolved_at && \Carbon\Carbon::parse($t->resolved_at)->gte($thisWeekStart));
 
             // Geçen Hafta Çözülenler
-            $lastWeekResolved = Ticket::where('assigned_to_id', $staff->id)
-                ->whereIn('status', ['resolved', 'closed'])
-                ->whereBetween('resolved_at', [$lastWeekStart, $lastWeekEnd])
-                ->get();
+            $lastWeekResolved = $staffTickets
+                ->filter(fn($t) => in_array($t->status, ['resolved', 'closed']) && $t->resolved_at && \Carbon\Carbon::parse($t->resolved_at)->between($lastWeekStart, $lastWeekEnd));
 
             // Bu Ay Çözülenler
-            $thisMonthResolved = Ticket::where('assigned_to_id', $staff->id)
-                ->whereIn('status', ['resolved', 'closed'])
-                ->where('resolved_at', '>=', $thisMonthStart)
-                ->get();
+            $thisMonthResolved = $staffTickets
+                ->filter(fn($t) => in_array($t->status, ['resolved', 'closed']) && $t->resolved_at && \Carbon\Carbon::parse($t->resolved_at)->gte($thisMonthStart));
 
-            // Ortalama Çözüm Süresi Hesabı (Bu Hafta vs Geçen Hafta)
-            $calcAvgResolution = function ($collection) {
+            // Ortalama Atamadan İşleme Alma Süresi (Dakika)
+            $inProgressTickets = $staffTickets->filter(fn($t) => $t->in_progress_at);
+            $avgResponseMins = 0;
+            if ($inProgressTickets->isNotEmpty()) {
+                $totalResp = 0;
+                foreach ($inProgressTickets as $t) {
+                    $start = $t->assigned_at ?: $t->created_at;
+                    $totalResp += \Carbon\Carbon::parse($start)->diffInMinutes(\Carbon\Carbon::parse($t->in_progress_at));
+                }
+                $avgResponseMins = round($totalResp / $inProgressTickets->count(), 1);
+            }
+
+            // Ortalama İşlemden Çözüme Alma Süresi (Dakika)
+            $resolvedWithProgress = $staffTickets->filter(fn($t) => $t->in_progress_at && $t->resolved_at);
+            $avgResolutionProcessMins = 0;
+            if ($resolvedWithProgress->isNotEmpty()) {
+                $totalResProcess = 0;
+                foreach ($resolvedWithProgress as $t) {
+                    $totalResProcess += \Carbon\Carbon::parse($t->in_progress_at)->diffInMinutes(\Carbon\Carbon::parse($t->resolved_at));
+                }
+                $avgResolutionProcessMins = round($totalResProcess / $resolvedWithProgress->count(), 1);
+            }
+
+            // Ortalama Toplam Çözüm Süresi Hesabı (Bu Hafta vs Geçen Hafta)
+            $calcAvgTotal = function ($collection) {
                 if ($collection->isEmpty()) return 0;
                 $totalMins = 0;
                 $count = 0;
@@ -467,9 +487,9 @@ class TicketController extends Controller
                 return $count > 0 ? round($totalMins / $count, 1) : 0;
             };
 
-            $thisWeekAvgMins = $calcAvgResolution($thisWeekResolved);
-            $lastWeekAvgMins = $calcAvgResolution($lastWeekResolved);
-            $monthAvgMins = $calcAvgResolution($thisMonthResolved);
+            $thisWeekAvgMins = $calcAvgTotal($thisWeekResolved);
+            $lastWeekAvgMins = $calcAvgTotal($lastWeekResolved);
+            $monthAvgMins = $calcAvgTotal($thisMonthResolved);
 
             // İlerleme / Gerileme Trend Analizi (% Değişim)
             $countDiff = $thisWeekResolved->count() - $lastWeekResolved->count();
@@ -490,6 +510,8 @@ class TicketController extends Controller
                 'this_week_resolved_count' => $thisWeekResolved->count(),
                 'last_week_resolved_count' => $lastWeekResolved->count(),
                 'this_month_resolved_count' => $thisMonthResolved->count(),
+                'avg_response_minutes' => $avgResponseMins,
+                'avg_resolution_process_minutes' => $avgResolutionProcessMins,
                 'this_week_avg_minutes' => $thisWeekAvgMins,
                 'last_week_avg_minutes' => $lastWeekAvgMins,
                 'this_month_avg_minutes' => $monthAvgMins,
@@ -577,9 +599,20 @@ class TicketController extends Controller
             ->get()
             ->map(function ($t) {
                 $assignTime = $t->assigned_at ?: $t->created_at;
+
+                $responseMinutes = null;
+                if ($t->in_progress_at) {
+                    $responseMinutes = round(\Carbon\Carbon::parse($assignTime)->diffInMinutes(\Carbon\Carbon::parse($t->in_progress_at)));
+                }
+
                 $resolutionMinutes = null;
+                if ($t->in_progress_at && $t->resolved_at) {
+                    $resolutionMinutes = round(\Carbon\Carbon::parse($t->in_progress_at)->diffInMinutes(\Carbon\Carbon::parse($t->resolved_at)));
+                }
+
+                $totalMinutes = null;
                 if ($t->resolved_at) {
-                    $resolutionMinutes = round(\Carbon\Carbon::parse($assignTime)->diffInMinutes(\Carbon\Carbon::parse($t->resolved_at)));
+                    $totalMinutes = round(\Carbon\Carbon::parse($assignTime)->diffInMinutes(\Carbon\Carbon::parse($t->resolved_at)));
                 }
 
                 return [
@@ -591,8 +624,12 @@ class TicketController extends Controller
                     'category' => $t->category ? $t->category->name : null,
                     'opened_by' => $t->user ? $t->user->name : 'Anonim',
                     'created_at' => \Carbon\Carbon::parse($t->created_at)->toDateTimeString(),
+                    'assigned_at' => \Carbon\Carbon::parse($assignTime)->toDateTimeString(),
+                    'in_progress_at' => $t->in_progress_at ? \Carbon\Carbon::parse($t->in_progress_at)->toDateTimeString() : null,
                     'resolved_at' => $t->resolved_at ? \Carbon\Carbon::parse($t->resolved_at)->toDateTimeString() : null,
+                    'response_minutes' => $responseMinutes,
                     'resolution_minutes' => $resolutionMinutes,
+                    'total_minutes' => $totalMinutes,
                 ];
             });
 

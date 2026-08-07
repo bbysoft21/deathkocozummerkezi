@@ -52,8 +52,12 @@ interface UserDetailData {
     category: string | null;
     opened_by: string;
     created_at: string;
+    assigned_at?: string;
+    in_progress_at?: string | null;
     resolved_at: string | null;
+    response_minutes?: number | null;
     resolution_minutes: number | null;
+    total_minutes?: number | null;
   }>;
   chart_data: Array<{
     date: string;
@@ -362,8 +366,10 @@ export const UserPerformanceModal: React.FC<UserPerformanceModalProps> = ({ user
                           <tr className="bg-[#22262a] border-b border-[#2a2f34] text-slate-400 uppercase tracking-wider text-[10px] font-extrabold">
                             <th className="py-3 px-4"># ID</th>
                             <th className="py-3 px-4">Başlık</th>
-                            <th className="py-3 px-4">Açan Yetkili</th>
-                            <th className="py-3 px-4">Çözüm Süresi</th>
+                            <th className="py-3 px-4">Açan Kişi</th>
+                            <th className="py-3 px-4">İşleme Alma Süresi</th>
+                            <th className="py-3 px-4">İşlemden Çözüm</th>
+                            <th className="py-3 px-4">Toplam Süre</th>
                             <th className="py-3 px-4">Durum</th>
                             <th className="py-3 px-4">Tamamlanma Tarihi</th>
                           </tr>
@@ -375,9 +381,17 @@ export const UserPerformanceModal: React.FC<UserPerformanceModalProps> = ({ user
                               <td className="py-3 px-4 font-bold text-white">{t.subject}</td>
                               <td className="py-3 px-4 text-amber-400 font-semibold">{t.opened_by}</td>
                               <td className="py-3 px-4 text-slate-300">
-                                <span className="font-mono text-emerald-400 font-bold">
-                                  {formatMinutes(t.resolution_minutes)}
+                                <span className="font-mono text-cyan-400 font-bold">
+                                  ⚡ {formatMinutes(t.response_minutes ?? null)}
                                 </span>
+                              </td>
+                              <td className="py-3 px-4 text-slate-300">
+                                <span className="font-mono text-emerald-400 font-bold">
+                                  ✅ {formatMinutes(t.resolution_minutes ?? null)}
+                                </span>
+                              </td>
+                              <td className="py-3 px-4 text-slate-300 font-mono text-[11px]">
+                                {formatMinutes(t.total_minutes ?? null)}
                               </td>
                               <td className="py-3 px-4">{getStatusBadge(t.status)}</td>
                               <td className="py-3 px-4 text-slate-400 text-[11px]">

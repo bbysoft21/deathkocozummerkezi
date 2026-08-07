@@ -42,6 +42,8 @@ interface StaffAnalytic {
   this_week_resolved_count: number;
   last_week_resolved_count: number;
   this_month_resolved_count: number;
+  avg_response_minutes?: number;
+  avg_resolution_process_minutes?: number;
   this_week_avg_minutes: number;
   last_week_avg_minutes: number;
   this_month_avg_minutes: number;
@@ -255,8 +257,20 @@ export const PerformanceReportView: React.FC<PerformanceReportViewProps> = ({ cu
                     )}
                   </div>
 
+                  {/* Response & Resolution Average Times Breakdown */}
+                  <div className="grid grid-cols-2 gap-2 pt-1 border-t border-[#2a2f34]/60 text-[11px]">
+                    <div className="p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-300">
+                      <span className="text-[9px] text-cyan-400/80 block font-semibold">Ort. İşleme Alma Süresi</span>
+                      <span className="font-extrabold text-xs">⚡ {formatMinutes(staff.avg_response_minutes ?? null)}</span>
+                    </div>
+                    <div className="p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-300">
+                      <span className="text-[9px] text-emerald-400/80 block font-semibold">Ort. İşlemden Çözüm</span>
+                      <span className="font-extrabold text-xs">✅ {formatMinutes(staff.avg_resolution_process_minutes ?? null)}</span>
+                    </div>
+                  </div>
+
                   {/* Weekly & Monthly Stat Grids */}
-                  <div className="grid grid-cols-2 gap-3 pt-2">
+                  <div className="grid grid-cols-2 gap-3">
                     {/* Bu Hafta Çözülen */}
                     <div className="p-3 rounded-2xl bg-[#1a1d1e] border border-[#2a2f34]/80 space-y-1">
                       <span className="text-[10px] text-slate-400 block font-medium">Bu Hafta Çözülen</span>
