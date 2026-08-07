@@ -214,6 +214,13 @@ class TicketController extends Controller
             $ticket->admin_response = $validated['admin_response'];
         }
 
+        // Eğer bilet henüz herhangi bir yetkiliye atanmamışsa (assigned_to_id = null),
+        // müdahale eden yetkilinin ID'sini doğrudan yetkili olarak ata ki rapor sadece onun adına tutulsun.
+        if (!$ticket->assigned_to_id) {
+            $ticket->assigned_to_id = $user->id;
+            $ticket->assigned_at = now();
+        }
+
         // İlk defa işleme alınıyorsa in_progress_at kaydet
         if ($validated['status'] === 'in_progress' && !$ticket->in_progress_at) {
             $ticket->in_progress_at = now();
@@ -225,7 +232,7 @@ class TicketController extends Controller
                 $ticket->in_progress_at = now();
             }
             $ticket->resolved_at = now();
-            $ticket->resolved_by_id = auth('sanctum')->id();
+            $ticket->resolved_by_id = $user->id;
         }
 
         $ticket->save();
