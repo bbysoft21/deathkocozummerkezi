@@ -810,21 +810,8 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
                     const catId = Number(e.target.value);
                     setNewCategoryId(catId);
                     
-                    const selectedCat = categories.find(c => c.id === catId);
-                    if (selectedCat) {
-                      const catName = selectedCat.name.toLowerCase();
-                      const catSlug = selectedCat.slug.toLowerCase();
-                      if (catName.includes('database') || catName.includes('güncelleme') || catName.includes('guncelleme') || catSlug === 'guncelleme') {
-                        const dbEditor = assignableUsers.find(u => u.role === 'admin') || assignableUsers[0];
-                        if (dbEditor) setAssignedToId(dbEditor.id);
-                      } else if (catName.includes('damage')) {
-                        const dmgEditor = assignableUsers.find(u => u.role === 'damage_editor') || assignableUsers[0];
-                        if (dmgEditor) setAssignedToId(dmgEditor.id);
-                      } else if (catName.includes('rehber')) {
-                        const guideEditor = assignableUsers.find(u => u.role === 'guide_editor') || assignableUsers[0];
-                        if (guideEditor) setAssignedToId(guideEditor.id);
-                      }
-                    }
+                    const dbEditor = assignableUsers.find(u => u.role === 'admin') || assignableUsers[0];
+                    if (dbEditor) setAssignedToId(dbEditor.id);
                   }}
                   className="w-full px-3.5 py-2.5 rounded-xl bg-[#1a1d1e] border border-[#2a2f34] text-xs text-white focus:outline-none focus:border-amber-500"
                 >
@@ -838,52 +825,26 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
               <div>
                 <label className="block text-xs font-semibold text-slate-300 mb-1 flex items-center justify-between">
                   <span>Müdahale Edecek Yetkili (İsteğe Bağlı)</span>
-                  {categories.find(c => c.id === Number(newCategoryId))?.name.toLowerCase().includes('database') && (
-                    <span className="text-[10px] text-amber-400 font-bold px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/30">
-                      ⚡ Db Editörler Listeleniyor
-                    </span>
-                  )}
-                  {categories.find(c => c.id === Number(newCategoryId))?.name.toLowerCase().includes('damage') && (
-                    <span className="text-[10px] text-rose-400 font-bold px-2 py-0.5 rounded bg-rose-500/10 border border-rose-500/30">
-                      🎯 Damage Sorumluları Listeleniyor
-                    </span>
-                  )}
-                  {categories.find(c => c.id === Number(newCategoryId))?.name.toLowerCase().includes('rehber') && (
-                    <span className="text-[10px] text-emerald-400 font-bold px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30">
-                      📚 Rehber Sorumluları Listeleniyor
-                    </span>
-                  )}
+                  <span className="text-[10px] text-amber-400 font-bold px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/30">
+                    ⚡ Sadece Db Editörleri Listeleniyor
+                  </span>
                 </label>
                 <select
                   value={assignedToId}
                   onChange={(e) => setAssignedToId(e.target.value)}
                   className="w-full px-3.5 py-2.5 rounded-xl bg-[#1a1d1e] border border-[#2a2f34] text-xs text-white focus:outline-none focus:border-amber-500"
                 >
-                  <option value="">-- Herhangi Bir Yetkili / Genel --</option>
+                  <option value="">-- Herhangi Bir Db Editörü / Genel --</option>
                   {assignableUsers
-                    .filter(u => {
-                      const selectedCat = categories.find(c => c.id === Number(newCategoryId));
-                      if (!selectedCat) return true;
-                      const catName = selectedCat.name.toLowerCase();
-                      if (catName.includes('database')) {
-                        return u.role === 'admin' || u.role === 'super_admin';
-                      }
-                      if (catName.includes('damage')) {
-                        return u.role === 'damage_editor' || u.role === 'super_admin';
-                      }
-                      if (catName.includes('rehber')) {
-                        return u.role === 'guide_editor' || u.role === 'super_admin';
-                      }
-                      return true;
-                    })
+                    .filter(u => u.role === 'admin')
                     .map((u) => (
                       <option key={u.id} value={u.id}>
-                        {u.name} ({u.role === 'admin' ? 'Db Editör' : u.role === 'damage_editor' ? 'Damage Sorumlusu' : u.role === 'guide_editor' ? 'Rehber Sorumlusu' : 'Yönetici'})
+                        {u.name} (Db Editör)
                       </option>
                     ))}
                 </select>
                 <p className="text-[10px] text-slate-500 mt-1">
-                  Seçtiğiniz yetkiliye bu sorun konusu hakkında anında bildirim gönderilir.
+                  Seçtiğiniz Db Editörüne bu sorun konusu hakkında anında bildirim gönderilir.
                 </p>
               </div>
 
@@ -1031,8 +992,8 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
               ) : (
                 <div className="p-3.5 rounded-2xl bg-cyan-950/30 border border-cyan-500/20 space-y-2">
                   <label className="block text-xs font-semibold text-cyan-300 flex items-center justify-between">
-                    <span>Kartı Başka Bir Admin / Yetkiliye Devret 🔄</span>
-                    <span className="text-[10px] text-cyan-400/80 font-normal">Devredildiği andan itibaren devredilen yetkilinin rapor süresi başlar</span>
+                    <span>Kartı Başka Bir Db Editörüne Devret 🔄</span>
+                    <span className="text-[10px] text-cyan-400/80 font-normal">Devredildiği andan itibaren devredilen Db Editörünün rapor süresi başlar</span>
                   </label>
                   <div className="flex items-center gap-2">
                     <select
@@ -1040,12 +1001,14 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
                       onChange={(e) => setReassignTargetId(e.target.value)}
                       className="flex-1 px-3 py-2 rounded-xl bg-[#1a1d1e] border border-[#2a2f34] text-xs text-slate-200 focus:outline-none focus:border-cyan-500"
                     >
-                      <option value="">Devredilecek Admin / Yetkili Seçin...</option>
-                      {assignableUsers.map((u) => (
-                        <option key={u.id} value={u.id}>
-                          {u.name} ({u.role === 'admin' ? 'Db Editör' : u.role === 'damage_editor' ? 'Damage Sorumlusu' : u.role === 'guide_editor' ? 'Rehber Sorumlusu' : 'Yönetici'})
-                        </option>
-                      ))}
+                      <option value="">Devredilecek Db Editörünü Seçin...</option>
+                      {assignableUsers
+                        .filter(u => u.role === 'admin')
+                        .map((u) => (
+                          <option key={u.id} value={u.id}>
+                            {u.name} (Db Editör)
+                          </option>
+                        ))}
                     </select>
                     <button
                       type="button"

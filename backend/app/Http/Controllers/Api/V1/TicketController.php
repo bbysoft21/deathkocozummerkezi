@@ -102,8 +102,8 @@ class TicketController extends Controller
 
         $categories = TicketCategory::all();
 
-        // Db Editörleri ('admin'), Damage Sorumluları ('damage_editor'), Rehber Sorumluları ('guide_editor') ve Süper Adminleri ('super_admin') getir
-        $assignableUsers = \App\Models\User::whereIn('role', ['super_admin', 'admin', 'damage_editor', 'guide_editor'])
+        // Sadece Db Editörlerini ('admin') getir
+        $assignableUsers = \App\Models\User::where('role', 'admin')
             ->where('status', 'active')
             ->select('id', 'name', 'email', 'role', 'avatar')
             ->get();
@@ -292,10 +292,10 @@ class TicketController extends Controller
 
         $newAssignee = \App\Models\User::findOrFail($validated['assigned_to_id']);
 
-        if (!in_array($newAssignee->role, ['super_admin', 'admin', 'damage_editor', 'guide_editor'])) {
+        if ($newAssignee->role !== 'admin') {
             return response()->json([
                 'success' => false,
-                'message' => 'Kart sadece admin / yetkili rolündeki kullanıcılara devredilebilir.'
+                'message' => 'Kart sadece Db Editörü rolündeki yetkililere devredilebilir.'
             ], 422);
         }
 
