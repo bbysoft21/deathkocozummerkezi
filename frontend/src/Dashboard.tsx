@@ -870,7 +870,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
       {/* SAĞ ALT CANLI SESLİ BİLDİRİM TOAST POP-UP */}
       {liveToast && liveToast.show && (
         <div className="fixed bottom-6 right-6 z-50 max-w-sm w-full rounded-2xl shadow-2xl p-4 space-y-2 animate-bounce flex flex-col justify-between backdrop-blur-md" style={{ backgroundColor: '#22262a', border: '2px solid rgba(255,185,56,0.75)' }}>
-          <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+          <div className="flex items-center justify-between border-b border-[#2a2f34] pb-2">
             <div className="flex items-center gap-2 font-extrabold text-xs" style={{ color: '#ffb938' }}>
               <Bell className="w-4 h-4 animate-ring" style={{ color: '#ffb938' }} />
               <span>{liveToast.title}</span>
@@ -896,3 +896,4 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
     </div>
   );
 };
+

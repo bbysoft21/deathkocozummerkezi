@@ -312,7 +312,7 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
       case 'urgent': return <span className="px-2 py-0.5 rounded-md bg-red-500/20 text-red-400 border border-red-500/30 text-[10px] font-bold uppercase">Acil</span>;
       case 'high': return <span className="px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-400 border border-amber-500/30 text-[10px] font-bold uppercase">Yüksek</span>;
       case 'medium': return <span className="px-2 py-0.5 rounded-md bg-blue-500/20 text-blue-400 border border-blue-500/30 text-[10px] font-bold uppercase">Normal</span>;
-      default: return <span className="px-2 py-0.5 rounded-md bg-slate-800 text-slate-400 text-[10px] font-bold uppercase">Düşük</span>;
+      default: return <span className="px-2 py-0.5 rounded-md bg-[#2a2f34] text-slate-400 text-[10px] font-bold uppercase">Düşük</span>;
     }
   };
 
@@ -321,7 +321,7 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
       case 'open': return <span className="px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[10px] font-bold uppercase flex items-center gap-1.5"><Clock className="w-3 h-3" /> Açık</span>;
       case 'in_progress': return <span className="px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 text-[10px] font-bold uppercase flex items-center gap-1.5"><RefreshCw className="w-3 h-3 animate-spin" /> İşlemde</span>;
       case 'resolved': return <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold uppercase flex items-center gap-1.5"><CheckCircle2 className="w-3 h-3" /> Çözüldü</span>;
-      default: return <span className="px-2.5 py-1 rounded-full bg-slate-800 text-slate-400 text-[10px] font-bold uppercase">Kapatıldı</span>;
+      default: return <span className="px-2.5 py-1 rounded-full bg-[#2a2f34] text-slate-400 text-[10px] font-bold uppercase">Kapatıldı</span>;
     }
   };
 
@@ -329,7 +329,7 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
     <div className="space-y-6">
       
       {/* Header Card */}
-      <div className="p-6 rounded-3xl bg-slate-900/80 border border-slate-800 backdrop-blur-xl relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="p-6 rounded-3xl bg-[#22262a]/80 border border-[#2a2f34] backdrop-blur-xl relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           <div className="p-4 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/20 shadow-lg">
             {icon}
@@ -357,7 +357,7 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
       </div>
 
       {/* Filter & Search Bar */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-slate-900/40 border border-slate-800">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-[#22262a]/40 border border-[#2a2f34]">
         <div className="relative w-full sm:w-80">
           <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-3" />
           <input
@@ -365,7 +365,7 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Oluşturan yetkili veya bildirim ara..."
-            className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-950/80 border border-slate-800 text-xs text-slate-200 focus:outline-none focus:border-amber-500/50"
+            className="w-full pl-10 pr-4 py-2 rounded-xl bg-[#1a1d1e]/80 border border-[#2a2f34] text-xs text-slate-200 focus:outline-none focus:border-amber-500/50"
           />
         </div>
 
@@ -378,7 +378,7 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
               className={`px-3 py-1.5 rounded-xl text-xs font-medium capitalize transition-all cursor-pointer ${
                 statusFilter === status
                   ? 'bg-amber-500/10 text-amber-400 border border-amber-500/30'
-                  : 'bg-slate-900 text-slate-400 border border-slate-800 hover:text-white'
+                  : 'bg-[#22262a] text-slate-400 border border-[#2a2f34] hover:text-white'
               }`}
             >
               {status === 'all' ? 'Tümü' : status === 'open' ? 'Açık' : status === 'in_progress' ? 'İşlemde' : status === 'resolved' ? 'Çözüldü' : 'Kapatıldı'}
@@ -404,9 +404,9 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
                   const ticketId = e.dataTransfer.getData('ticketId');
                   if (ticketId) handleDropStatusChange(Number(ticketId), 'open');
                 }}
-                className="space-y-4 bg-slate-900/40 p-4 rounded-3xl border border-slate-800/80 min-h-[350px] transition-colors hover:border-amber-500/30"
+                className="space-y-4 bg-[#22262a]/40 p-4 rounded-3xl border border-[#2a2f34]/80 min-h-[350px] transition-colors hover:border-amber-500/30"
               >
-                <div className="flex items-center justify-between px-2 pb-2 border-b border-slate-800">
+                <div className="flex items-center justify-between px-2 pb-2 border-b border-[#2a2f34]">
                   <div className="flex items-center gap-2 text-amber-400 font-bold text-sm">
                     <Clock className="w-4 h-4" />
                     <span>Beklemede Olanlar</span>
@@ -417,7 +417,7 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
                 </div>
 
                 {pendingTickets.length === 0 ? (
-                  <div className="p-8 text-center text-slate-500 text-xs bg-slate-950/40 rounded-2xl border border-slate-800/40 border-dashed">
+                  <div className="p-8 text-center text-slate-500 text-xs bg-[#1a1d1e]/40 rounded-2xl border border-[#2a2f34]/40 border-dashed">
                     Bekleyen talep yok (Buraya sürükleyebilirsiniz)
                   </div>
                 ) : (
@@ -430,7 +430,7 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
                           e.dataTransfer.setData('ticketId', String(t.id));
                         }}
                         onClick={() => { setSelectedTicket(t); setAdminResponseText(t.admin_response || ''); }}
-                        className="p-5 rounded-3xl bg-slate-900/70 border border-slate-800 hover:border-amber-500/50 transition-all duration-200 cursor-grab active:cursor-grabbing flex flex-col justify-between space-y-4 group hover:shadow-xl hover:shadow-amber-500/5 relative overflow-hidden"
+                        className="p-5 rounded-3xl bg-[#22262a]/70 border border-[#2a2f34] hover:border-amber-500/50 transition-all duration-200 cursor-grab active:cursor-grabbing flex flex-col justify-between space-y-4 group hover:shadow-xl hover:shadow-amber-500/5 relative overflow-hidden"
                       >
                         <div className="space-y-3">
                           <div className="flex items-center justify-between gap-2">
@@ -450,10 +450,10 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
                           </p>
                         </div>
 
-                        <div className="pt-3 border-t border-slate-800/80 space-y-2 text-xs">
+                        <div className="pt-3 border-t border-[#2a2f34]/80 space-y-2 text-xs">
                           <div className="flex items-center justify-between gap-2">
                             {t.category ? (
-                              <span className="px-2 py-0.5 rounded-md bg-slate-950 text-slate-300 text-[10px] border border-slate-800 font-medium">
+                              <span className="px-2 py-0.5 rounded-md bg-[#1a1d1e] text-slate-300 text-[10px] border border-[#2a2f34] font-medium">
                                 {t.category.name}
                               </span>
                             ) : <span />}
@@ -477,7 +477,7 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
                           </div>
 
                           {t.assignedTo && (
-                            <div className="flex items-center justify-between text-[11px] text-cyan-400 pt-1.5 border-t border-slate-800/40">
+                            <div className="flex items-center justify-between text-[11px] text-cyan-400 pt-1.5 border-t border-[#2a2f34]/40">
                               <span className="flex items-center gap-1.5 truncate">
                                 <UserCheck className="w-3.5 h-3.5 shrink-0 text-cyan-400" />
                                 <span className="truncate">
@@ -526,9 +526,9 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
                   const ticketId = e.dataTransfer.getData('ticketId');
                   if (ticketId) handleDropStatusChange(Number(ticketId), 'in_progress');
                 }}
-                className="space-y-4 bg-slate-900/40 p-4 rounded-3xl border border-slate-800/80 min-h-[350px] transition-colors hover:border-cyan-500/30"
+                className="space-y-4 bg-[#22262a]/40 p-4 rounded-3xl border border-[#2a2f34]/80 min-h-[350px] transition-colors hover:border-cyan-500/30"
               >
-                <div className="flex items-center justify-between px-2 pb-2 border-b border-slate-800">
+                <div className="flex items-center justify-between px-2 pb-2 border-b border-[#2a2f34]">
                   <div className="flex items-center gap-2 text-cyan-400 font-bold text-sm">
                     <RefreshCw className="w-4 h-4 animate-spin" />
                     <span>İşlemde Olanlar</span>
@@ -539,7 +539,7 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
                 </div>
 
                 {inProgressTickets.length === 0 ? (
-                  <div className="p-8 text-center text-slate-500 text-xs bg-slate-950/40 rounded-2xl border border-slate-800/40 border-dashed">
+                  <div className="p-8 text-center text-slate-500 text-xs bg-[#1a1d1e]/40 rounded-2xl border border-[#2a2f34]/40 border-dashed">
                     İşlemde olan talep yok (Buraya sürükleyebilirsiniz)
                   </div>
                 ) : (
@@ -552,7 +552,7 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
                           e.dataTransfer.setData('ticketId', String(t.id));
                         }}
                         onClick={() => { setSelectedTicket(t); setAdminResponseText(t.admin_response || ''); }}
-                        className="p-5 rounded-3xl bg-slate-900/70 border border-slate-800 hover:border-cyan-500/50 transition-all duration-200 cursor-grab active:cursor-grabbing flex flex-col justify-between space-y-4 group hover:shadow-xl hover:shadow-cyan-500/5 relative overflow-hidden"
+                        className="p-5 rounded-3xl bg-[#22262a]/70 border border-[#2a2f34] hover:border-cyan-500/50 transition-all duration-200 cursor-grab active:cursor-grabbing flex flex-col justify-between space-y-4 group hover:shadow-xl hover:shadow-cyan-500/5 relative overflow-hidden"
                       >
                         <div className="space-y-3">
                           <div className="flex items-center justify-between gap-2">
@@ -572,10 +572,10 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
                           </p>
                         </div>
 
-                        <div className="pt-3 border-t border-slate-800/80 space-y-2 text-xs">
+                        <div className="pt-3 border-t border-[#2a2f34]/80 space-y-2 text-xs">
                           <div className="flex items-center justify-between gap-2">
                             {t.category ? (
-                              <span className="px-2 py-0.5 rounded-md bg-slate-950 text-slate-300 text-[10px] border border-slate-800 font-medium">
+                              <span className="px-2 py-0.5 rounded-md bg-[#1a1d1e] text-slate-300 text-[10px] border border-[#2a2f34] font-medium">
                                 {t.category.name}
                               </span>
                             ) : <span />}
@@ -599,7 +599,7 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
                           </div>
 
                           {t.assignedTo && (
-                            <div className="flex items-center justify-between text-[11px] text-cyan-400 pt-1.5 border-t border-slate-800/40">
+                            <div className="flex items-center justify-between text-[11px] text-cyan-400 pt-1.5 border-t border-[#2a2f34]/40">
                               <span className="flex items-center gap-1.5 truncate">
                                 <UserCheck className="w-3.5 h-3.5 shrink-0 text-cyan-400" />
                                 <span className="truncate">
@@ -648,9 +648,9 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
                   const ticketId = e.dataTransfer.getData('ticketId');
                   if (ticketId) handleDropStatusChange(Number(ticketId), 'resolved');
                 }}
-                className="space-y-4 bg-slate-900/40 p-4 rounded-3xl border border-slate-800/80 min-h-[350px] transition-colors hover:border-emerald-500/30"
+                className="space-y-4 bg-[#22262a]/40 p-4 rounded-3xl border border-[#2a2f34]/80 min-h-[350px] transition-colors hover:border-emerald-500/30"
               >
-                <div className="flex items-center justify-between px-2 pb-2 border-b border-slate-800">
+                <div className="flex items-center justify-between px-2 pb-2 border-b border-[#2a2f34]">
                   <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm">
                     <CheckCircle2 className="w-4 h-4" />
                     <span>Çözüldü</span>
@@ -661,7 +661,7 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
                 </div>
 
                 {resolvedTickets.length === 0 ? (
-                  <div className="p-8 text-center text-slate-500 text-xs bg-slate-950/40 rounded-2xl border border-slate-800/40 border-dashed">
+                  <div className="p-8 text-center text-slate-500 text-xs bg-[#1a1d1e]/40 rounded-2xl border border-[#2a2f34]/40 border-dashed">
                     Çözülmüş talep yok (Buraya sürükleyebilirsiniz)
                   </div>
                 ) : (
@@ -674,7 +674,7 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
                           e.dataTransfer.setData('ticketId', String(t.id));
                         }}
                         onClick={() => { setSelectedTicket(t); setAdminResponseText(t.admin_response || ''); }}
-                        className="p-5 rounded-3xl bg-slate-900/70 border border-slate-800 hover:border-emerald-500/50 transition-all duration-200 cursor-grab active:cursor-grabbing flex flex-col justify-between space-y-4 group hover:shadow-xl hover:shadow-emerald-500/5 relative overflow-hidden"
+                        className="p-5 rounded-3xl bg-[#22262a]/70 border border-[#2a2f34] hover:border-emerald-500/50 transition-all duration-200 cursor-grab active:cursor-grabbing flex flex-col justify-between space-y-4 group hover:shadow-xl hover:shadow-emerald-500/5 relative overflow-hidden"
                       >
                         <div className="space-y-3">
                           <div className="flex items-center justify-between gap-2">
@@ -694,10 +694,10 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
                           </p>
                         </div>
 
-                        <div className="pt-3 border-t border-slate-800/80 space-y-2 text-xs">
+                        <div className="pt-3 border-t border-[#2a2f34]/80 space-y-2 text-xs">
                           <div className="flex items-center justify-between gap-2">
                             {t.category ? (
-                              <span className="px-2 py-0.5 rounded-md bg-slate-950 text-slate-300 text-[10px] border border-slate-800 font-medium">
+                              <span className="px-2 py-0.5 rounded-md bg-[#1a1d1e] text-slate-300 text-[10px] border border-[#2a2f34] font-medium">
                                 {t.category.name}
                               </span>
                             ) : <span />}
@@ -721,7 +721,7 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
                           </div>
 
                           {t.resolver && (
-                            <div className="flex items-center justify-between text-[11px] text-emerald-400 pt-1 border-t border-slate-800/40">
+                            <div className="flex items-center justify-between text-[11px] text-emerald-400 pt-1 border-t border-[#2a2f34]/40">
                               <span className="flex items-center gap-1.5 truncate">
                                 <UserCheck className="w-3.5 h-3.5 shrink-0" />
                                 <span className="truncate">Çözen: <b className="text-emerald-300">{t.resolver.name}</b></span>
@@ -753,8 +753,8 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
 
       {/* New Ticket Modal (Pop-up): Order: Başlık -> Kategori -> Mesaj -> Görsel Ekleme */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
-          <div className="w-full max-w-lg p-6 rounded-3xl bg-slate-900 border border-slate-800 shadow-2xl space-y-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1a1d1e]/80 backdrop-blur-sm">
+          <div className="w-full max-w-lg p-6 rounded-3xl bg-[#22262a] border border-[#2a2f34] shadow-2xl space-y-4">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-bold text-white">Yeni Sorun Bildirimi Oluştur</h2>
               <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-white cursor-pointer">
@@ -774,7 +774,7 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
                   required
                   value={newSubject}
                   onChange={(e) => setNewSubject(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:outline-none focus:border-amber-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#1a1d1e] border border-[#2a2f34] text-xs text-white focus:outline-none focus:border-amber-500"
                   placeholder="Örn: Görev Ödülü Yüklenmedi"
                 />
               </div>
@@ -805,7 +805,7 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
                       }
                     }
                   }}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:outline-none focus:border-amber-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#1a1d1e] border border-[#2a2f34] text-xs text-white focus:outline-none focus:border-amber-500"
                 >
                   {categories.map((c) => (
                     <option key={c.id} value={c.id}>{c.name}</option>
@@ -836,7 +836,7 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
                 <select
                   value={assignedToId}
                   onChange={(e) => setAssignedToId(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:outline-none focus:border-amber-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#1a1d1e] border border-[#2a2f34] text-xs text-white focus:outline-none focus:border-amber-500"
                 >
                   <option value="">-- Herhangi Bir Yetkili / Genel --</option>
                   {assignableUsers
@@ -876,7 +876,7 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
                   rows={4}
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:outline-none focus:border-amber-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#1a1d1e] border border-[#2a2f34] text-xs text-white focus:outline-none focus:border-amber-500"
                   placeholder="Sorun detayını buraya açıklayın..."
                 />
               </div>
@@ -886,7 +886,7 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
                 <label className="block text-xs font-semibold text-slate-300 mb-1">
                   Görsel Ekle (Opsiyonel Ekran Görüntüsü)
                 </label>
-                <div className="relative border-2 border-dashed border-slate-800 hover:border-amber-500/50 rounded-xl p-4 text-center bg-slate-950 transition-colors cursor-pointer">
+                <div className="relative border-2 border-dashed border-[#2a2f34] hover:border-amber-500/50 rounded-xl p-4 text-center bg-[#1a1d1e] transition-colors cursor-pointer">
                   <input
                     type="file"
                     accept="image/*"
@@ -923,7 +923,7 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-semibold cursor-pointer"
+                  className="px-4 py-2 rounded-xl bg-[#2a2f34] text-slate-300 text-xs font-semibold cursor-pointer"
                 >
                   İptal
                 </button>
@@ -942,8 +942,8 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
 
       {/* Ticket Detail / Response Modal */}
       {selectedTicket && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
-          <div className="w-full max-w-xl p-6 rounded-3xl bg-slate-900 border border-slate-800 shadow-2xl space-y-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1a1d1e]/80 backdrop-blur-sm">
+          <div className="w-full max-w-xl p-6 rounded-3xl bg-[#22262a] border border-[#2a2f34] shadow-2xl space-y-4">
             <div className="flex items-center justify-between">
               <h2 className="text-base font-bold text-white">Bildirim Detayı</h2>
               <button onClick={() => setSelectedTicket(null)} className="text-slate-400 hover:text-white cursor-pointer">
@@ -951,8 +951,8 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
               </button>
             </div>
 
-            <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-3">
-              <div className="grid grid-cols-2 gap-2 text-xs text-slate-400 border-b border-slate-800 pb-3">
+            <div className="p-4 rounded-2xl bg-[#1a1d1e] border border-[#2a2f34] space-y-3">
+              <div className="grid grid-cols-2 gap-2 text-xs text-slate-400 border-b border-[#2a2f34] pb-3">
                 <div>Oluşturan Yetkili: <b className="text-white block">{selectedTicket.user?.name || 'Bilinmiyor'}</b></div>
                 <div>Oluşturma Tarihi: <b className="text-white block">{new Date(selectedTicket.created_at).toLocaleString('tr-TR')}</b></div>
                 {selectedTicket.resolver && (
@@ -976,9 +976,9 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
                     <img 
                       src={selectedTicket.image_path} 
                       alt="Ekran Görüntüsü" 
-                      className="w-full max-h-56 object-cover rounded-xl border border-slate-800 group-hover:opacity-90 transition-opacity"
+                      className="w-full max-h-56 object-cover rounded-xl border border-[#2a2f34] group-hover:opacity-90 transition-opacity"
                     />
-                    <span className="absolute bottom-2 right-2 px-2.5 py-1 rounded-lg bg-slate-950/80 text-amber-400 text-[10px] font-semibold flex items-center gap-1 backdrop-blur-sm">
+                    <span className="absolute bottom-2 right-2 px-2.5 py-1 rounded-lg bg-[#1a1d1e]/80 text-amber-400 text-[10px] font-semibold flex items-center gap-1 backdrop-blur-sm">
                       Tam Boyut Gör <ExternalLink className="w-3 h-3" />
                     </span>
                   </a>
@@ -993,7 +993,7 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
                 rows={3}
                 value={adminResponseText}
                 onChange={(e) => setAdminResponseText(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:outline-none focus:border-amber-500"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-[#1a1d1e] border border-[#2a2f34] text-xs text-white focus:outline-none focus:border-amber-500"
                 placeholder="Talebe yanıt yazın..."
               />
             </div>
@@ -1009,7 +1009,7 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
                   <select
                     value={reassignTargetId}
                     onChange={(e) => setReassignTargetId(e.target.value)}
-                    className="flex-1 px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-200 focus:outline-none focus:border-cyan-500"
+                    className="flex-1 px-3 py-2 rounded-xl bg-[#1a1d1e] border border-[#2a2f34] text-xs text-slate-200 focus:outline-none focus:border-cyan-500"
                   >
                     <option value="">Devredilecek Admin / Yetkili Seçin...</option>
                     {assignableUsers.map((u) => (
@@ -1057,7 +1057,7 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
 
               <button
                 onClick={() => setSelectedTicket(null)}
-                className="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-semibold cursor-pointer hover:bg-slate-700"
+                className="px-4 py-2 rounded-xl bg-[#2a2f34] text-slate-300 text-xs font-semibold cursor-pointer hover:bg-slate-700"
               >
                 Kapat
               </button>
@@ -1068,7 +1068,7 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
 
       {/* Bottom Right Toast Notification */}
       {toastNotification.show && (
-        <div className="fixed bottom-6 right-6 z-50 p-4 rounded-2xl bg-slate-900 border border-amber-500/40 text-slate-100 shadow-2xl shadow-amber-500/10 flex items-center gap-3.5 animate-bounce">
+        <div className="fixed bottom-6 right-6 z-50 p-4 rounded-2xl bg-[#22262a] border border-amber-500/40 text-slate-100 shadow-2xl shadow-amber-500/10 flex items-center gap-3.5 animate-bounce">
           <div className="p-2.5 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
             <CheckCircle2 className="w-5 h-5" />
           </div>
@@ -1090,3 +1090,4 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
     </div>
   );
 };
+
