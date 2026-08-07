@@ -133,8 +133,8 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
 
             {/* Header */}
             <div className="text-center mb-8">
-              <div className="inline-flex p-2.5 rounded-2xl shadow-xl mb-3 ring-4 backdrop-blur-md"
-                   style={{ backgroundColor: 'rgba(26,29,30,0.95)', border: '1px solid rgba(255,185,56,0.35)', boxShadow: '0 8px 32px rgba(255,185,56,0.12)', ringColor: 'rgba(255,185,56,0.10)' }}>
+              <div className="inline-flex p-2.5 rounded-2xl shadow-xl mb-3 ring-4 backdrop-blur-md ring-[rgba(255,185,56,0.10)]"
+                   style={{ backgroundColor: 'rgba(26,29,30,0.95)', border: '1px solid rgba(255,185,56,0.35)', boxShadow: '0 8px 32px rgba(255,185,56,0.12)' }}>
                 <img src={faviconLogo} alt="DeathKO Logo" className="w-12 h-12 object-contain rounded-xl" />
               </div>
               <h2 className="text-2xl font-bold text-white tracking-wide">Yönetici Girişi</h2>
