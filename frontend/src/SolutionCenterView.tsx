@@ -222,6 +222,12 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
   };
 
   const handleDropStatusChange = async (ticketId: number, newStatus: string) => {
+    const targetTicket = tickets.find(t => t.id === ticketId);
+    if (targetTicket && (targetTicket.status === 'resolved' || targetTicket.status === 'closed')) {
+      alert('Çözülmüş veya kapatılmış durumdaki konular geriye dönük sürüklenemez.');
+      return;
+    }
+
     try {
       const token = localStorage.getItem('auth_token');
       // Optimistic UI Update (Sürükler sürüklemez ekranda anında taşı)
@@ -669,12 +675,8 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
                     {resolvedTickets.map((t) => (
                       <div 
                         key={t.id}
-                        draggable
-                        onDragStart={(e) => {
-                          e.dataTransfer.setData('ticketId', String(t.id));
-                        }}
                         onClick={() => { setSelectedTicket(t); setAdminResponseText(t.admin_response || ''); }}
-                        className="p-5 rounded-3xl bg-[#22262a]/70 border border-[#2a2f34] hover:border-emerald-500/50 transition-all duration-200 cursor-grab active:cursor-grabbing flex flex-col justify-between space-y-4 group hover:shadow-xl hover:shadow-emerald-500/5 relative overflow-hidden"
+                        className="p-5 rounded-3xl bg-[#22262a]/70 border border-[#2a2f34] hover:border-emerald-500/50 transition-all duration-200 cursor-pointer flex flex-col justify-between space-y-4 group hover:shadow-xl hover:shadow-emerald-500/5 relative overflow-hidden"
                       >
                         <div className="space-y-3">
                           <div className="flex items-center justify-between gap-2">
