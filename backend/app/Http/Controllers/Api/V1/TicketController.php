@@ -522,4 +522,109 @@ class TicketController extends Controller
             ]
         ]);
     }
+
+    public function userPerformanceDetail(Request $request, $userId)
+    {
+        $currentUser = auth('sanctum')->user();
+        if (!$currentUser || $currentUser->role !== 'super_admin') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Bu rapora yalnızca Süper Adminler erişebilir.'
+            ], 403);
+        }
+
+        $targetUser = \App\Models\User::find($userId);
+        if (!$targetUser) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Kullanıcı bulunamadı.'
+            ], 404);
+        }
+
+        // Açtığı konular (Created Tickets)
+        $openedTickets = Ticket::with(['assignedTo', 'category'])
+            ->where('user_id', $userId)
+            ->latest()
+            ->get()
+            ->map(function ($t) {
+                return [
+                    'id' => $t->id,
+                    'subject' => $t->subject,
+                    'status' => $t->status,
+                    'priority' => $t->priority,
+                    'solution_center' => $t->solution_center,
+                    'category' => $t->category ? $t->category->name : null,
+                    'assigned_to' => $t->assignedTo ? $t->assignedTo->name : null,
+                    'created_at' => \Carbon\Carbon::parse($t->created_at)->toDateTimeString(),
+                    'resolved_at' => $t->resolved_at ? \Carbon\Carbon::parse($t->resolved_at)->toDateTimeString() : null,
+                ];
+            });
+
+        // Çözdüğü / Üstlendiği konular (Assigned & Resolved Tickets)
+        $resolvedTickets = Ticket::with(['user', 'category'])
+            ->where('assigned_to_id', $userId)
+            ->latest()
+            ->get()
+            ->map(function ($t) {
+                $assignTime = $t->assigned_at ?: $t->created_at;
+                $resolutionMinutes = null;
+                if ($t->resolved_at) {
+                    $resolutionMinutes = round(\Carbon\Carbon::parse($assignTime)->diffInMinutes(\Carbon\Carbon::parse($t->resolved_at)));
+                }
+
+                return [
+                    'id' => $t->id,
+                    'subject' => $t->subject,
+                    'status' => $t->status,
+                    'priority' => $t->priority,
+                    'solution_center' => $t->solution_center,
+                    'category' => $t->category ? $t->category->name : null,
+                    'opened_by' => $t->user ? $t->user->name : 'Anonim',
+                    'created_at' => \Carbon\Carbon::parse($t->created_at)->toDateTimeString(),
+                    'resolved_at' => $t->resolved_at ? \Carbon\Carbon::parse($t->resolved_at)->toDateTimeString() : null,
+                    'resolution_minutes' => $resolutionMinutes,
+                ];
+            });
+
+        // Son 14 Günlük Aktivite Grafiği Verisi
+        $chartData = [];
+        $startDate = now()->subDays(13)->startOfDay();
+
+        for ($i = 0; $i < 14; $i++) {
+            $currentDate = $startDate->copy()->addDays($i);
+            $dayString = $currentDate->format('Y-m-d');
+            $displayDate = $currentDate->format('d M');
+
+            $openedCount = Ticket::where('user_id', $userId)
+                ->whereDate('created_at', $dayString)
+                ->count();
+
+            $resolvedCount = Ticket::where('assigned_to_id', $userId)
+                ->whereIn('status', ['resolved', 'closed'])
+                ->whereDate('resolved_at', $dayString)
+                ->count();
+
+            $chartData[] = [
+                'date' => $displayDate,
+                'opened' => $openedCount,
+                'resolved' => $resolvedCount,
+            ];
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'user' => [
+                    'id' => $targetUser->id,
+                    'name' => $targetUser->name,
+                    'email' => $targetUser->email,
+                    'role' => $targetUser->role,
+                    'avatar' => $targetUser->avatar,
+                ],
+                'opened_tickets' => $openedTickets,
+                'resolved_tickets' => $resolvedTickets,
+                'chart_data' => $chartData,
+            ]
+        ]);
+    }
 }

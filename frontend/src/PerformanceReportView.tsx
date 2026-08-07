@@ -11,6 +11,7 @@ import {
   ChevronUp
 } from 'lucide-react';
 import axios from 'axios';
+import { UserPerformanceModal } from './components/UserPerformanceModal';
 
 interface TicketLog {
   id: number;
@@ -77,6 +78,7 @@ export const PerformanceReportView: React.FC<PerformanceReportViewProps> = ({ cu
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isGmSectionOpen, setIsGmSectionOpen] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
 
   useEffect(() => {
     fetchPerformanceData();
@@ -209,7 +211,7 @@ export const PerformanceReportView: React.FC<PerformanceReportViewProps> = ({ cu
             <div className="flex items-center justify-between">
               <h2 className="text-base font-extrabold text-white flex items-center gap-2">
                 <TrendingUp className="w-4 h-4 text-amber-400" />
-                Yetkili Çözüm Hızı & Haftalık/Aylık Trend Analizi
+                Yetkili Çözüm Hızı ve Haftalık/Aylık Trend Analizi
               </h2>
               <span className="text-xs text-slate-500">Kıyaslama: Geçen Hafta vs Bu Hafta</span>
             </div>
@@ -218,7 +220,8 @@ export const PerformanceReportView: React.FC<PerformanceReportViewProps> = ({ cu
               {filteredStaffAnalytics.map((staff) => (
                 <div 
                   key={staff.user.id} 
-                  className="p-5 rounded-3xl bg-[#22262a]/80 border border-[#2a2f34] space-y-4 relative overflow-hidden shadow-xl hover:border-[#343a40] transition-all"
+                  onClick={() => setSelectedUserId(staff.user.id)}
+                  className="p-5 rounded-3xl bg-[#22262a]/80 border border-[#2a2f34] space-y-4 relative overflow-hidden shadow-xl hover:border-amber-500/50 transition-all cursor-pointer group"
                 >
                   {/* User Badge Top */}
                   <div className="flex items-center justify-between">
@@ -269,12 +272,17 @@ export const PerformanceReportView: React.FC<PerformanceReportViewProps> = ({ cu
                     </div>
                   </div>
 
-                  {/* Monthly Summary Bar */}
+                  {/* Monthly Summary Bar & Detail Action */}
                   <div className="p-3 rounded-2xl bg-[#1a1d1e]/60 border border-[#2a2f34]/60 flex items-center justify-between text-xs">
                     <span className="text-slate-400 font-medium">Bu Ay Toplam Çözülen:</span>
                     <span className="font-extrabold text-amber-400">{staff.this_month_resolved_count} Konu ({formatMinutes(staff.this_month_avg_minutes)} ort.)</span>
                   </div>
 
+                  <div className="text-right pt-1">
+                    <span className="text-[11px] font-bold text-amber-400 group-hover:underline inline-flex items-center gap-1">
+                      Grafik ve Log Detayları →
+                    </span>
+                  </div>
                 </div>
               ))}
             </div>
@@ -422,7 +430,11 @@ export const PerformanceReportView: React.FC<PerformanceReportViewProps> = ({ cu
                         </tr>
                       ) : (
                         gmAnalytics.map((gm) => (
-                          <tr key={gm.user.id} className="hover:bg-[#2a2f34]/30 transition-colors">
+                          <tr 
+                            key={gm.user.id} 
+                            onClick={() => setSelectedUserId(gm.user.id)}
+                            className="hover:bg-[#2a2f34]/50 transition-colors cursor-pointer group"
+                          >
                             <td className="py-4 px-6">
                               <div className="flex items-center gap-3">
                                 <img
@@ -445,8 +457,8 @@ export const PerformanceReportView: React.FC<PerformanceReportViewProps> = ({ cu
                             <td className="py-4 px-4 font-bold text-emerald-400">
                               {gm.this_month_created_count} Konu
                             </td>
-                            <td className="py-4 px-6 text-right font-mono font-bold text-white">
-                              {gm.total_created_count} Konu
+                             <td className="py-4 px-6 text-right font-mono font-bold text-white">
+                              <span className="group-hover:text-amber-400 transition-colors">{gm.total_created_count} Konu →</span>
                             </td>
                           </tr>
                         ))
@@ -458,6 +470,14 @@ export const PerformanceReportView: React.FC<PerformanceReportViewProps> = ({ cu
             )}
           </div>
         </>
+      )}
+
+      {/* User Performance Detail Modal */}
+      {selectedUserId && (
+        <UserPerformanceModal
+          userId={selectedUserId}
+          onClose={() => setSelectedUserId(null)}
+        />
       )}
 
     </div>

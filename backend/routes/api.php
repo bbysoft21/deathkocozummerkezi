@@ -23,6 +23,7 @@ Route::prefix('v1')->group(function () {
         // Solution Centers Tickets API
         Route::get('/tickets/stats', [TicketController::class, 'stats']);
         Route::get('/tickets/performance-analytics', [TicketController::class, 'performanceAnalytics']);
+        Route::get('/tickets/performance-analytics/{userId}', [TicketController::class, 'userPerformanceDetail']);
         Route::get('/tickets', [TicketController::class, 'index']);
         Route::post('/tickets', [TicketController::class, 'store']);
         Route::patch('/tickets/{id}/status', [TicketController::class, 'updateStatus']);
