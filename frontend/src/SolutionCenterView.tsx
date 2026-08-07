@@ -331,6 +331,36 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
     }
   };
 
+  const isUpdateCategory = (t: Ticket) => {
+    if (!t.category) return false;
+    const name = t.category.name.toLowerCase();
+    const slug = t.category.slug.toLowerCase();
+    return slug === 'guncelleme' || name.includes('güncelleme') || name.includes('guncelleme');
+  };
+
+  const getCardClass = (t: Ticket, defaultBorderHover: string, extraCursor: string = 'cursor-grab active:cursor-grabbing') => {
+    if (isUpdateCategory(t)) {
+      return `p-5 rounded-3xl bg-gradient-to-r from-purple-950/70 via-[#22262a] to-indigo-950/70 border-2 border-purple-500/60 hover:border-purple-400 transition-all duration-200 ${extraCursor} flex flex-col justify-between space-y-4 group hover:shadow-xl hover:shadow-purple-500/20 relative overflow-hidden`;
+    }
+    return `p-5 rounded-3xl bg-[#22262a]/70 border border-[#2a2f34] ${defaultBorderHover} transition-all duration-200 ${extraCursor} flex flex-col justify-between space-y-4 group hover:shadow-xl relative overflow-hidden`;
+  };
+
+  const getCategoryBadge = (t: Ticket) => {
+    if (!t.category) return <span />;
+    if (isUpdateCategory(t)) {
+      return (
+        <span className="px-2.5 py-0.5 rounded-md bg-purple-500/25 text-purple-300 text-[10px] border border-purple-500/40 font-extrabold uppercase flex items-center gap-1 shadow-sm">
+          ⚡ {t.category.name}
+        </span>
+      );
+    }
+    return (
+      <span className="px-2 py-0.5 rounded-md bg-[#1a1d1e] text-slate-300 text-[10px] border border-[#2a2f34] font-medium">
+        {t.category.name}
+      </span>
+    );
+  };
+
   return (
     <div className="space-y-6">
       
@@ -436,7 +466,7 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
                           e.dataTransfer.setData('ticketId', String(t.id));
                         }}
                         onClick={() => { setSelectedTicket(t); setAdminResponseText(t.admin_response || ''); }}
-                        className="p-5 rounded-3xl bg-[#22262a]/70 border border-[#2a2f34] hover:border-amber-500/50 transition-all duration-200 cursor-grab active:cursor-grabbing flex flex-col justify-between space-y-4 group hover:shadow-xl hover:shadow-amber-500/5 relative overflow-hidden"
+                        className={getCardClass(t, 'hover:border-amber-500/50 hover:shadow-amber-500/5')}
                       >
                         <div className="space-y-3">
                           <div className="flex items-center justify-between gap-2">
@@ -458,11 +488,7 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
 
                         <div className="pt-3 border-t border-[#2a2f34]/80 space-y-2 text-xs">
                           <div className="flex items-center justify-between gap-2">
-                            {t.category ? (
-                              <span className="px-2 py-0.5 rounded-md bg-[#1a1d1e] text-slate-300 text-[10px] border border-[#2a2f34] font-medium">
-                                {t.category.name}
-                              </span>
-                            ) : <span />}
+                            {getCategoryBadge(t)}
 
                             {t.image_path && (
                               <span className="px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[10px] font-semibold flex items-center gap-1">
@@ -558,7 +584,7 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
                           e.dataTransfer.setData('ticketId', String(t.id));
                         }}
                         onClick={() => { setSelectedTicket(t); setAdminResponseText(t.admin_response || ''); }}
-                        className="p-5 rounded-3xl bg-[#22262a]/70 border border-[#2a2f34] hover:border-cyan-500/50 transition-all duration-200 cursor-grab active:cursor-grabbing flex flex-col justify-between space-y-4 group hover:shadow-xl hover:shadow-cyan-500/5 relative overflow-hidden"
+                        className={getCardClass(t, 'hover:border-cyan-500/50 hover:shadow-cyan-500/5')}
                       >
                         <div className="space-y-3">
                           <div className="flex items-center justify-between gap-2">
@@ -580,11 +606,7 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
 
                         <div className="pt-3 border-t border-[#2a2f34]/80 space-y-2 text-xs">
                           <div className="flex items-center justify-between gap-2">
-                            {t.category ? (
-                              <span className="px-2 py-0.5 rounded-md bg-[#1a1d1e] text-slate-300 text-[10px] border border-[#2a2f34] font-medium">
-                                {t.category.name}
-                              </span>
-                            ) : <span />}
+                            {getCategoryBadge(t)}
 
                             {t.image_path && (
                               <span className="px-2 py-0.5 rounded-md bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 text-[10px] font-semibold flex items-center gap-1">
@@ -676,7 +698,7 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
                       <div 
                         key={t.id}
                         onClick={() => { setSelectedTicket(t); setAdminResponseText(t.admin_response || ''); }}
-                        className="p-5 rounded-3xl bg-[#22262a]/70 border border-[#2a2f34] hover:border-emerald-500/50 transition-all duration-200 cursor-pointer flex flex-col justify-between space-y-4 group hover:shadow-xl hover:shadow-emerald-500/5 relative overflow-hidden"
+                        className={getCardClass(t, 'hover:border-emerald-500/50 hover:shadow-emerald-500/5', 'cursor-pointer')}
                       >
                         <div className="space-y-3">
                           <div className="flex items-center justify-between gap-2">
@@ -698,11 +720,7 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
 
                         <div className="pt-3 border-t border-[#2a2f34]/80 space-y-2 text-xs">
                           <div className="flex items-center justify-between gap-2">
-                            {t.category ? (
-                              <span className="px-2 py-0.5 rounded-md bg-[#1a1d1e] text-slate-300 text-[10px] border border-[#2a2f34] font-medium">
-                                {t.category.name}
-                              </span>
-                            ) : <span />}
+                            {getCategoryBadge(t)}
 
                             {t.image_path && (
                               <span className="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-semibold flex items-center gap-1">
@@ -795,7 +813,8 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
                     const selectedCat = categories.find(c => c.id === catId);
                     if (selectedCat) {
                       const catName = selectedCat.name.toLowerCase();
-                      if (catName.includes('database')) {
+                      const catSlug = selectedCat.slug.toLowerCase();
+                      if (catName.includes('database') || catName.includes('güncelleme') || catName.includes('guncelleme') || catSlug === 'guncelleme') {
                         const dbEditor = assignableUsers.find(u => u.role === 'admin') || assignableUsers[0];
                         if (dbEditor) setAssignedToId(dbEditor.id);
                       } else if (catName.includes('damage')) {

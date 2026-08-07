@@ -99,7 +99,8 @@ class DatabaseSeeder extends Seeder
         $cat3 = TicketCategory::updateOrCreate(['slug' => 'odeme-pus-islemleri'], ['uuid' => (string) Str::uuid(), 'name' => 'Ödeme & PUS İşlemleri', 'description' => 'Bakiye, KC ve Alışveriş Talepleri']);
         $cat4 = TicketCategory::updateOrCreate(['slug' => 'teknik-hata-baglanti'], ['uuid' => (string) Str::uuid(), 'name' => 'Teknik Hata & Bağlantı', 'description' => 'Client Kapanma, DC ve Ping Sorunları']);
         $cat5 = TicketCategory::updateOrCreate(['slug' => 'database-sorunlari'], ['uuid' => (string) Str::uuid(), 'name' => 'Database Sorunları', 'description' => 'Veritabanı, karakter, eşya kaybı ve DB kayıt hataları']);
-        $cat6 = TicketCategory::updateOrCreate(['slug' => 'damage-sorunlari'], ['uuid' => (string) Str::uuid(), 'name' => 'Damage Sorunları', 'description' => 'Skill, silah, zırh ve karakter hasar/damage dengesizliği bildirimleri']);
+        $cat6 = TicketCategory::updateOrCreate(['slug' => 'damage-sorunlari'], ['uuid' => (string) Str::uuid(), 'name' => 'Damage Sorunlari', 'description' => 'Skill, silah, zırh ve karakter hasar/damage dengesizliği bildirimleri']);
         $cat7 = TicketCategory::updateOrCreate(['slug' => 'rehber-forum-sorunu'], ['uuid' => (string) Str::uuid(), 'name' => 'Rehber Forum Sorunu', 'description' => 'Forum rehberleri, içerik güncellemeleri ve forum sorun bildirimleri']);
+        $cat8 = TicketCategory::updateOrCreate(['slug' => 'guncelleme'], ['uuid' => (string) Str::uuid(), 'name' => 'Güncelleme', 'description' => 'Sistem güncellemeleri, versiyon/yama değişiklikleri ve güncellemeler']);
     }
 }

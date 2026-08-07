@@ -90,6 +90,16 @@ class TicketController extends Controller
      */
     public function categories()
     {
+        // 'guncelleme' kategorisinin varligindan emin ol
+        TicketCategory::updateOrCreate(
+            ['slug' => 'guncelleme'],
+            [
+                'uuid' => (string) \Illuminate\Support\Str::uuid(),
+                'name' => 'Güncelleme',
+                'description' => 'Sistem güncellemeleri, versiyon/yama değişiklikleri ve güncellemeler'
+            ]
+        );
+
         $categories = TicketCategory::all();
 
         // Db Editörleri ('admin'), Damage Sorumluları ('damage_editor'), Rehber Sorumluları ('guide_editor') ve Süper Adminleri ('super_admin') getir
