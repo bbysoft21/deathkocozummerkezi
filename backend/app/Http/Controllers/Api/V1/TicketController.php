@@ -417,6 +417,12 @@ class TicketController extends Controller
                 $totalMinutes = round(\Carbon\Carbon::parse($assignTime)->diffInMinutes(\Carbon\Carbon::parse($t->resolved_at)));
             }
 
+            // Eğer kart devredilmişse, devretmeden önceki elinde tutma süresi (Dakika)
+            $transferHoldingMinutes = null;
+            if ($t->reassigned_at) {
+                $transferHoldingMinutes = round(\Carbon\Carbon::parse($t->created_at)->diffInMinutes(\Carbon\Carbon::parse($t->reassigned_at)));
+            }
+
             return [
                 'id' => $t->id,
                 'subject' => $t->subject,
@@ -427,13 +433,20 @@ class TicketController extends Controller
                     'role' => $t->assignedTo->role,
                     'avatar' => $t->assignedTo->avatar,
                 ] : null,
+                'reassigned_from' => $t->reassignedFrom ? [
+                    'id' => $t->reassignedFrom->id,
+                    'name' => $t->reassignedFrom->name,
+                    'role' => $t->reassignedFrom->role,
+                ] : null,
                 'created_at' => \Carbon\Carbon::parse($t->created_at)->toDateTimeString(),
                 'assigned_at' => $t->assigned_at ? \Carbon\Carbon::parse($t->assigned_at)->toDateTimeString() : \Carbon\Carbon::parse($t->created_at)->toDateTimeString(),
+                'reassigned_at' => $t->reassigned_at ? \Carbon\Carbon::parse($t->reassigned_at)->toDateTimeString() : null,
                 'in_progress_at' => $t->in_progress_at ? \Carbon\Carbon::parse($t->in_progress_at)->toDateTimeString() : null,
                 'resolved_at' => $t->resolved_at ? \Carbon\Carbon::parse($t->resolved_at)->toDateTimeString() : null,
                 'response_time_minutes' => $responseMinutes,
                 'resolution_time_minutes' => $resolutionMinutes,
                 'total_time_minutes' => $totalMinutes,
+                'transfer_holding_minutes' => $transferHoldingMinutes,
             ];
         });
 
@@ -507,6 +520,18 @@ class TicketController extends Controller
                 $trend = 'declining'; // Geriliyor
             }
 
+            // Devrettiği Konuların Analizi (Bu yetkilinin başkasına devrettiği konular ve devretmeden önce elinde tuttuğu ortalama süre)
+            $transferredTickets = Ticket::where('reassigned_from_id', $staff->id)->whereNotNull('reassigned_at')->get();
+            $avgTransferHoldingMins = 0;
+            if ($transferredTickets->isNotEmpty()) {
+                $totalHoldMins = 0;
+                foreach ($transferredTickets as $t) {
+                    $start = $t->created_at;
+                    $totalHoldMins += \Carbon\Carbon::parse($start)->diffInMinutes(\Carbon\Carbon::parse($t->reassigned_at));
+                }
+                $avgTransferHoldingMins = round($totalHoldMins / $transferredTickets->count(), 1);
+            }
+
             return [
                 'user' => [
                     'id' => $staff->id,
@@ -517,6 +542,8 @@ class TicketController extends Controller
                 'this_week_resolved_count' => $thisWeekResolved->count(),
                 'last_week_resolved_count' => $lastWeekResolved->count(),
                 'this_month_resolved_count' => $thisMonthResolved->count(),
+                'transferred_count' => $transferredTickets->count(),
+                'avg_transfer_holding_minutes' => $avgTransferHoldingMins,
                 'avg_response_minutes' => $avgResponseMins,
                 'avg_resolution_process_minutes' => $avgResolutionProcessMins,
                 'this_week_avg_minutes' => $thisWeekAvgMins,
@@ -640,6 +667,31 @@ class TicketController extends Controller
                 ];
             });
 
+        // Başkasına Devrettiği Konular (Transferred Tickets)
+        $transferredTickets = Ticket::with(['assignedTo', 'category'])
+            ->where('reassigned_from_id', $userId)
+            ->latest()
+            ->get()
+            ->map(function ($t) {
+                $start = $t->created_at;
+                $holdingMins = null;
+                if ($t->reassigned_at) {
+                    $holdingMins = round(\Carbon\Carbon::parse($start)->diffInMinutes(\Carbon\Carbon::parse($t->reassigned_at)));
+                }
+                return [
+                    'id' => $t->id,
+                    'subject' => $t->subject,
+                    'status' => $t->status,
+                    'priority' => $t->priority,
+                    'solution_center' => $t->solution_center,
+                    'category' => $t->category ? $t->category->name : null,
+                    'transferred_to' => $t->assignedTo ? $t->assignedTo->name : 'Bilinmiyor',
+                    'created_at' => \Carbon\Carbon::parse($t->created_at)->toDateTimeString(),
+                    'reassigned_at' => $t->reassigned_at ? \Carbon\Carbon::parse($t->reassigned_at)->toDateTimeString() : null,
+                    'holding_minutes' => $holdingMins,
+                ];
+            });
+
         // Son 14 Günlük Aktivite Grafiği Verisi
         $chartData = [];
         $startDate = now()->subDays(13)->startOfDay();
@@ -677,6 +729,7 @@ class TicketController extends Controller
                 ],
                 'opened_tickets' => $openedTickets,
                 'resolved_tickets' => $resolvedTickets,
+                'transferred_tickets' => $transferredTickets,
                 'chart_data' => $chartData,
             ]
         ]);

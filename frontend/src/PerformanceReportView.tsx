@@ -42,6 +42,8 @@ interface StaffAnalytic {
   this_week_resolved_count: number;
   last_week_resolved_count: number;
   this_month_resolved_count: number;
+  transferred_count?: number;
+  avg_transfer_holding_minutes?: number;
   avg_response_minutes?: number;
   avg_resolution_process_minutes?: number;
   this_week_avg_minutes: number;
@@ -287,9 +289,17 @@ export const PerformanceReportView: React.FC<PerformanceReportViewProps> = ({ cu
                   </div>
 
                   {/* Monthly Summary Bar & Detail Action */}
-                  <div className="p-3 rounded-2xl bg-[#1a1d1e]/60 border border-[#2a2f34]/60 flex items-center justify-between text-xs">
-                    <span className="text-slate-400 font-medium">Bu Ay Toplam Çözülen:</span>
-                    <span className="font-extrabold text-amber-400">{staff.this_month_resolved_count} Konu ({formatMinutes(staff.this_month_avg_minutes)} ort.)</span>
+                  <div className="p-3 rounded-2xl bg-[#1a1d1e]/60 border border-[#2a2f34]/60 space-y-1.5 text-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-400 font-medium">Bu Ay Toplam Çözülen:</span>
+                      <span className="font-extrabold text-amber-400">{staff.this_month_resolved_count} Konu ({formatMinutes(staff.this_month_avg_minutes)} ort.)</span>
+                    </div>
+                    {staff.transferred_count !== undefined && staff.transferred_count > 0 && (
+                      <div className="flex items-center justify-between text-[11px] pt-1 border-t border-[#2a2f34]/40 text-amber-300">
+                        <span>🔄 Başkasına Devredilen:</span>
+                        <span className="font-bold">{staff.transferred_count} Konu (Ort. {formatMinutes(staff.avg_transfer_holding_minutes ?? null)} tutuldu)</span>
+                      </div>
+                    )}
                   </div>
 
                   <div className="text-right pt-1">

@@ -59,6 +59,18 @@ interface UserDetailData {
     resolution_minutes: number | null;
     total_minutes?: number | null;
   }>;
+  transferred_tickets?: Array<{
+    id: number;
+    subject: string;
+    status: string;
+    priority: string;
+    solution_center: string;
+    category: string | null;
+    transferred_to: string;
+    created_at: string;
+    reassigned_at: string | null;
+    holding_minutes: number | null;
+  }>;
   chart_data: Array<{
     date: string;
     opened: number;
@@ -70,7 +82,7 @@ export const UserPerformanceModal: React.FC<UserPerformanceModalProps> = ({ user
   const [data, setData] = useState<UserDetailData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'opened' | 'resolved'>('opened');
+  const [activeTab, setActiveTab] = useState<'opened' | 'resolved' | 'transferred'>('opened');
 
   useEffect(() => {
     if (userId) {
@@ -298,6 +310,18 @@ export const UserPerformanceModal: React.FC<UserPerformanceModalProps> = ({ user
                     <CheckCircle2 className="w-3.5 h-3.5" />
                     <span>Çözdüğü / Üstlendiği Konular ({data.resolved_tickets.length})</span>
                   </button>
+
+                  <button
+                    onClick={() => setActiveTab('transferred')}
+                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
+                      activeTab === 'transferred'
+                        ? 'bg-purple-500/15 text-purple-400 border border-purple-500/30 shadow-md'
+                        : 'bg-[#1a1d1e] text-slate-400 border border-[#2a2f34] hover:text-white'
+                    }`}
+                  >
+                    <Activity className="w-3.5 h-3.5" />
+                    <span>Başkasına Devrettiği Konular ({data.transferred_tickets?.length || 0})</span>
+                  </button>
                 </div>
               </div>
 
@@ -396,6 +420,50 @@ export const UserPerformanceModal: React.FC<UserPerformanceModalProps> = ({ user
                               <td className="py-3 px-4">{getStatusBadge(t.status)}</td>
                               <td className="py-3 px-4 text-slate-400 text-[11px]">
                                 {t.resolved_at ? new Date(t.resolved_at).toLocaleDateString('tr-TR') : '-'}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Tab 3: Transferred Tickets */}
+              {activeTab === 'transferred' && (
+                <div className="bg-[#1a1d1e] border border-[#2a2f34] rounded-2xl overflow-hidden">
+                  {!data.transferred_tickets || data.transferred_tickets.length === 0 ? (
+                    <div className="p-8 text-center text-slate-500 text-xs">
+                      Bu kullanıcının başka bir yetkiliye devrettiği herhangi bir konu bulunmuyor.
+                    </div>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left border-collapse">
+                        <thead>
+                          <tr className="bg-[#22262a] border-b border-[#2a2f34] text-slate-400 uppercase tracking-wider text-[10px] font-extrabold">
+                            <th className="py-3 px-4"># ID</th>
+                            <th className="py-3 px-4">Başlık</th>
+                            <th className="py-3 px-4">Devredilen Yetkili</th>
+                            <th className="py-3 px-4">Devretmeden Önce Elinde Tutma Süresi</th>
+                            <th className="py-3 px-4">Durum</th>
+                            <th className="py-3 px-4">Devretme Tarihi</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-[#2a2f34] text-xs">
+                          {data.transferred_tickets.map((t) => (
+                            <tr key={t.id} className="hover:bg-[#22262a]/50 transition-colors">
+                              <td className="py-3 px-4 font-mono text-[11px] text-slate-500">#{t.id}</td>
+                              <td className="py-3 px-4 font-bold text-white">{t.subject}</td>
+                              <td className="py-3 px-4 text-cyan-400 font-semibold">{t.transferred_to}</td>
+                              <td className="py-3 px-4 text-slate-300">
+                                <span className="font-mono text-amber-400 font-bold">
+                                  ⏳ {formatMinutes(t.holding_minutes)}
+                                </span>
+                              </td>
+                              <td className="py-3 px-4">{getStatusBadge(t.status)}</td>
+                              <td className="py-3 px-4 text-slate-400 text-[11px]">
+                                {t.reassigned_at ? new Date(t.reassigned_at).toLocaleDateString('tr-TR') : '-'}
                               </td>
                             </tr>
                           ))}
