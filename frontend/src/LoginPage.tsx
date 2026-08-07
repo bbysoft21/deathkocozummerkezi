@@ -31,6 +31,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
         const { user, access_token } = response.data.data;
         localStorage.setItem('auth_token', access_token);
         localStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem('login_time', Date.now().toString());
         onLoginSuccess(user);
       }
     } catch (err: any) {
