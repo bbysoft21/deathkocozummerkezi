@@ -205,15 +205,15 @@ export const UserManagementView: React.FC<UserManagementViewProps> = ({ currentU
     switch (role) {
       case 'super_admin':
         return (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-extrabold bg-amber-500/15 border border-amber-500/40 text-amber-400">
-            <Shield className="w-3.5 h-3.5 text-amber-400" />
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-extrabold" style={{ backgroundColor: 'rgba(255,185,56,0.12)', border: '1px solid rgba(255,185,56,0.35)', color: '#ffb938' }}>
+            <Shield className="w-3.5 h-3.5" style={{ color: '#ffb938' }} />
             Yönetici (Süper Admin)
           </span>
         );
       case 'admin':
         return (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold bg-cyan-500/15 border border-cyan-500/40 text-cyan-400">
-            <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold" style={{ backgroundColor: 'rgba(255,208,128,0.10)', border: '1px solid rgba(255,208,128,0.30)', color: '#ffd080' }}>
+            <ShieldCheck className="w-3.5 h-3.5" style={{ color: '#ffd080' }} />
             Db Editör (Admin)
           </span>
         );
@@ -283,47 +283,48 @@ export const UserManagementView: React.FC<UserManagementViewProps> = ({ currentU
     <div className="p-6 md:p-8 max-w-7xl mx-auto space-y-8">
       
       {/* Header Banner */}
-      <div className="relative overflow-hidden p-6 rounded-3xl bg-gradient-to-r from-slate-900 via-slate-900/90 to-amber-950/40 border border-slate-800 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div className="relative overflow-hidden p-6 rounded-3xl shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-6" style={{ background: 'linear-gradient(135deg, #22262a 0%, rgba(34,38,42,0.9) 60%, rgba(255,185,56,0.08) 100%)', border: '1px solid #343a40' }}>
         <div className="space-y-2 z-10">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-2xl bg-amber-500/20 border border-amber-500/40 text-amber-400">
+            <div className="p-2.5 rounded-2xl" style={{ backgroundColor: 'rgba(255,185,56,0.15)', border: '1px solid rgba(255,185,56,0.35)', color: '#ffb938' }}>
               <Users className="w-6 h-6" />
             </div>
             <div>
               <h1 className="text-2xl font-black tracking-wide text-white">Oyuncu & GM Yönetim Merkezi</h1>
-              <p className="text-xs text-slate-400">Sistem yöneticileri, Db Editörleri ve Game Master (GM) hesaplarını yönetin ve yetkilendirin.</p>
+              <p className="text-xs" style={{ color: '#8a9099' }}>Sistem yöneticileri, Db Editörleri ve Game Master (GM) hesaplarını yönetin ve yetkilendirin.</p>
             </div>
           </div>
         </div>
 
         <button
           onClick={openCreateModal}
-          className="z-10 px-5 py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold text-xs shadow-lg shadow-amber-500/25 flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer"
+          className="z-10 px-5 py-3 rounded-2xl font-extrabold text-xs flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer"
+          style={{ background: 'linear-gradient(135deg, #ffb938, #e6a020)', color: '#1a1d1e', boxShadow: '0 6px 20px rgba(255,185,56,0.28)' }}
         >
           <UserPlus className="w-4 h-4" />
           <span>Yeni Yetkili / GM Ekle</span>
         </button>
 
-        {/* Decorative Ambient Background */}
-        <div className="absolute -right-10 -bottom-10 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -right-10 -bottom-10 w-48 h-48 rounded-full blur-3xl pointer-events-none" style={{ backgroundColor: 'rgba(255,185,56,0.06)' }} />
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 bg-slate-900/60 p-4 rounded-2xl border border-slate-800/80">
+      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 p-4 rounded-2xl" style={{ backgroundColor: 'rgba(34,38,42,0.6)', border: '1px solid rgba(52,58,64,0.8)' }}>
         
-        {/* Search */}
         <form onSubmit={handleSearchSubmit} className="relative flex-1">
-          <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-3" />
+          <Search className="w-4 h-4 absolute left-3.5 top-3" style={{ color: '#8a9099' }} />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Kullanıcı adı veya e-posta ile ara..."
-            className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-200 focus:outline-none focus:border-amber-500/50 transition-all"
+            className="w-full pl-10 pr-4 py-2 rounded-xl text-xs text-slate-200 focus:outline-none transition-all"
+            style={{ backgroundColor: '#1a1d1e', border: '1px solid #343a40' }}
+            onFocus={e => (e.currentTarget.style.borderColor = 'rgba(255,185,56,0.5)')}
+            onBlur={e => (e.currentTarget.style.borderColor = '#343a40')}
           />
         </form>
 
-        {/* Role Tabs Filter */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0">
           {[
             { id: 'all', label: 'Tüm Hesaplar' },
@@ -334,11 +335,11 @@ export const UserManagementView: React.FC<UserManagementViewProps> = ({ currentU
             <button
               key={tab.id}
               onClick={() => setRoleFilter(tab.id)}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
-                roleFilter === tab.id
-                  ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20'
-                  : 'bg-slate-950 border border-slate-800 text-slate-400 hover:text-white'
-              }`}
+              className="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer"
+              style={roleFilter === tab.id
+                ? { backgroundColor: '#ffb938', color: '#1a1d1e', boxShadow: '0 4px 12px rgba(255,185,56,0.22)' }
+                : { backgroundColor: '#1a1d1e', border: '1px solid #343a40', color: '#8a9099' }
+              }
             >
               {tab.label}
             </button>
@@ -349,24 +350,24 @@ export const UserManagementView: React.FC<UserManagementViewProps> = ({ currentU
       {/* User Table / List */}
       {loading ? (
         <div className="py-16 text-center space-y-3">
-          <div className="w-8 h-8 border-2 border-amber-500 border-t-transparent rounded-full animate-spin mx-auto" />
-          <p className="text-xs text-slate-400 font-medium">Yetkili hesaplar yükleniyor...</p>
+          <div className="w-8 h-8 border-2 border-t-transparent rounded-full animate-spin mx-auto" style={{ borderColor: '#ffb938', borderTopColor: 'transparent' }} />
+          <p className="text-xs font-medium" style={{ color: '#8a9099' }}>Yetkili hesaplar yükleniyor...</p>
         </div>
       ) : error ? (
         <div className="p-6 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-center text-xs">
           {error}
         </div>
       ) : users.length === 0 ? (
-        <div className="py-16 text-center bg-slate-900/30 rounded-3xl border border-slate-800/60 space-y-3">
+        <div className="py-16 text-center rounded-3xl space-y-3" style={{ backgroundColor: 'rgba(34,38,42,0.3)', border: '1px solid rgba(52,58,64,0.6)' }}>
           <Users className="w-10 h-10 text-slate-600 mx-auto" />
           <p className="text-sm font-bold text-slate-400">Kullanıcı Bulunamadı</p>
           <p className="text-xs text-slate-500">Arama kriterlerinize uygun henüz bir kullanıcı veya yetkili bulunmuyor.</p>
         </div>
       ) : (
-        <div className="bg-slate-900/60 border border-slate-800/80 rounded-3xl overflow-hidden shadow-xl">
+        <div className="rounded-3xl overflow-hidden shadow-xl" style={{ backgroundColor: 'rgba(34,38,42,0.6)', border: '1px solid rgba(52,58,64,0.8)' }}>
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs text-slate-300">
-              <thead className="bg-slate-950/80 border-b border-slate-800 text-slate-400 uppercase tracking-wider font-extrabold text-[10px]">
+              <thead className="border-b uppercase tracking-wider font-extrabold text-[10px]" style={{ backgroundColor: 'rgba(26,29,30,0.8)', borderColor: '#343a40', color: '#8a9099' }}>
                 <tr>
                   <th className="py-4 px-6">Kullanıcı & Profil</th>
                   <th className="py-4 px-4">Mail Adresi</th>
@@ -376,9 +377,9 @@ export const UserManagementView: React.FC<UserManagementViewProps> = ({ currentU
                   <th className="py-4 px-6 text-right">İşlemler</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/60">
+              <tbody className="divide-y" style={{ borderColor: 'rgba(52,58,64,0.6)' }}>
                 {users.map((u) => (
-                  <tr key={u.id} className="hover:bg-slate-800/30 transition-colors group">
+                  <tr key={u.id} className="transition-colors group" onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'rgba(52,58,64,0.25)')} onMouseLeave={e => (e.currentTarget.style.backgroundColor = '')}>
                     
                     {/* User Info & Avatar */}
                     <td className="py-4 px-6">
@@ -386,10 +387,10 @@ export const UserManagementView: React.FC<UserManagementViewProps> = ({ currentU
                         <img
                           src={u.avatar || PRESET_AVATARS[0]}
                           alt={u.name}
-                          className="w-10 h-10 rounded-2xl object-cover border border-amber-500/30 shadow-md bg-slate-950"
+                          className="w-10 h-10 rounded-2xl object-cover shadow-md" style={{ border: '1px solid rgba(255,185,56,0.25)', backgroundColor: '#1a1d1e' }}
                         />
                         <div>
-                          <div className="font-extrabold text-white group-hover:text-amber-400 transition-colors">
+                          <div className="font-extrabold text-white transition-colors" onMouseEnter={e => (e.currentTarget.style.color = '#ffb938')} onMouseLeave={e => (e.currentTarget.style.color = '#fff')}>
                             {u.name}
                           </div>
                           <div className="text-[10px] text-slate-500 font-mono">UUID: {u.uuid.substring(0, 8)}...</div>

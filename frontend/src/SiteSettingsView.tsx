@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { 
-  Settings, 
-  Database, 
-  Trash2, 
-  ShieldCheck, 
-  Globe, 
-  CheckCircle2, 
+import {
+  Settings,
+  Database,
+  Trash2,
+  ShieldCheck,
+  Globe,
+  CheckCircle2,
   AlertTriangle
 } from 'lucide-react';
 import axios from 'axios';
@@ -76,29 +76,28 @@ export const SiteSettingsView: React.FC<SiteSettingsViewProps> = ({ currentUser 
   return (
     <div className="space-y-6 max-w-5xl mx-auto pb-12">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-900/60 border border-slate-800/80 p-6 rounded-3xl backdrop-blur-xl shadow-xl">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-3xl backdrop-blur-xl shadow-xl" style={{ backgroundColor: 'rgba(34,38,42,0.7)', border: '1px solid rgba(52,58,64,0.8)' }}>
         <div className="flex items-center gap-4">
-          <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400">
+          <div className="p-3.5 rounded-2xl" style={{ backgroundColor: 'rgba(255,185,56,0.10)', border: '1px solid rgba(255,185,56,0.20)', color: '#ffb938' }}>
             <Settings className="w-6 h-6" />
           </div>
           <div>
             <h1 className="text-xl font-extrabold text-white tracking-wide">Site Ayarları & Sistem Yönetimi</h1>
-            <p className="text-xs text-slate-400 mt-0.5">Kurumsal genel yapılandırma ve veritabanı optimizasyon paneli</p>
+            <p className="text-xs mt-0.5" style={{ color: '#8a9099' }}>Kurumsal genel yapılandırma ve veritabanı optimizasyon paneli</p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 w-fit">
+        <div className="flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-xl w-fit" style={{ backgroundColor: 'rgba(255,185,56,0.10)', border: '1px solid rgba(255,185,56,0.25)', color: '#ffb938' }}>
           <ShieldCheck className="w-4 h-4" />
           <span>Kurumsal Yönetici Modu</span>
         </div>
       </div>
 
       {dbCleanMsg && (
-        <div className={`p-4 rounded-2xl border text-xs font-bold flex items-center gap-3 ${
-          dbCleanMsg.type === 'success'
+        <div className={`p-4 rounded-2xl border text-xs font-bold flex items-center gap-3 ${dbCleanMsg.type === 'success'
             ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300'
             : 'bg-rose-500/15 border-rose-500/40 text-rose-300'
-        }`}>
+          }`}>
           <CheckCircle2 className="w-5 h-5 shrink-0" />
           <span>{dbCleanMsg.text}</span>
         </div>
@@ -106,12 +105,12 @@ export const SiteSettingsView: React.FC<SiteSettingsViewProps> = ({ currentUser 
 
       {/* Grid: Genel Ayarlar & Database Optimizasyonu */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        
+
         {/* SOL: Kurumsal Genel Site Ayarları */}
         <div className="lg:col-span-7 space-y-6">
-          <div className="bg-slate-900/90 border border-amber-500/30 rounded-3xl p-6 shadow-2xl space-y-5">
-            <div className="flex items-center gap-2 text-sm font-extrabold text-amber-400 border-b border-slate-800 pb-3">
-              <Globe className="w-4 h-4 text-amber-400" />
+          <div className="rounded-3xl p-6 shadow-2xl space-y-5" style={{ backgroundColor: 'rgba(34,38,42,0.9)', border: '1px solid rgba(255,185,56,0.20)' }}>
+            <div className="flex items-center gap-2 text-sm font-extrabold pb-3" style={{ color: '#ffb938', borderBottom: '1px solid #343a40' }}>
+              <Globe className="w-4 h-4" style={{ color: '#ffb938' }} />
               <span>Genel Yapılandırma</span>
             </div>
 
@@ -124,32 +123,41 @@ export const SiteSettingsView: React.FC<SiteSettingsViewProps> = ({ currentUser 
               )}
 
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-amber-300 block">Portal Başlığı</label>
+                <label className="text-xs font-bold block" style={{ color: '#ffb938' }}>Portal Başlığı</label>
                 <input
                   type="text"
                   value={siteTitle}
                   onChange={(e) => setSiteTitle(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:outline-none focus:border-amber-400"
+                  className="w-full px-4 py-2.5 rounded-xl text-xs text-white focus:outline-none"
+                  style={{ backgroundColor: '#1a1d1e', border: '1px solid #343a40' }}
+                  onFocus={e => (e.currentTarget.style.borderColor = '#ffb938')}
+                  onBlur={e => (e.currentTarget.style.borderColor = '#343a40')}
                 />
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-amber-300 block">Açıklama & Meta Bilgisi</label>
+                <label className="text-xs font-bold block" style={{ color: '#ffb938' }}>Açıklama & Meta Bilgisi</label>
                 <textarea
                   rows={3}
                   value={siteDesc}
                   onChange={(e) => setSiteDesc(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:outline-none focus:border-amber-400"
+                  className="w-full px-4 py-2.5 rounded-xl text-xs text-white focus:outline-none"
+                  style={{ backgroundColor: '#1a1d1e', border: '1px solid #343a40' }}
+                  onFocus={e => (e.currentTarget.style.borderColor = '#ffb938')}
+                  onBlur={e => (e.currentTarget.style.borderColor = '#343a40')}
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-amber-300 block">Maksimum Görsel Yükleme Boyutu</label>
+                  <label className="text-xs font-bold block" style={{ color: '#ffb938' }}>Maksimum Görsel Yükleme Boyutu</label>
                   <select
                     value={maxUploadSize}
                     onChange={(e) => setMaxUploadSize(e.target.value)}
-                    className="w-full px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white focus:outline-none focus:border-amber-400"
+                    className="w-full px-3 py-2.5 rounded-xl text-xs text-white focus:outline-none"
+                    style={{ backgroundColor: '#1a1d1e', border: '1px solid #343a40' }}
+                    onFocus={e => (e.currentTarget.style.borderColor = '#ffb938')}
+                    onBlur={e => (e.currentTarget.style.borderColor = '#343a40')}
                   >
                     <option value="2MB">2 MB</option>
                     <option value="5MB">5 MB (Önerilen)</option>
@@ -158,15 +166,15 @@ export const SiteSettingsView: React.FC<SiteSettingsViewProps> = ({ currentUser 
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-amber-300 block">Sipariş & Bildirim Sesleri</label>
+                  <label className="text-xs font-bold block" style={{ color: '#ffb938' }}>Sipariş & Bildirim Sesleri</label>
                   <button
                     type="button"
                     onClick={() => setNotificationSoundEnabled(!notificationSoundEnabled)}
-                    className={`w-full py-2.5 px-3 rounded-xl border text-xs font-extrabold transition-all flex items-center justify-center gap-2 cursor-pointer ${
-                      notificationSoundEnabled
-                        ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-md shadow-amber-500/20'
-                        : 'bg-slate-950 border-slate-800 text-slate-400'
-                    }`}
+                    className="w-full py-2.5 px-3 rounded-xl text-xs font-extrabold transition-all flex items-center justify-center gap-2 cursor-pointer"
+                    style={notificationSoundEnabled
+                      ? { backgroundColor: '#ffb938', color: '#1a1d1e', border: '1px solid #ffd080', boxShadow: '0 4px 12px rgba(255,185,56,0.25)' }
+                      : { backgroundColor: '#1a1d1e', border: '1px solid #343a40', color: '#8a9099' }
+                    }
                   >
                     <span>{notificationSoundEnabled ? '🔊 Sesli Uyarılar Aktif' : '🔇 Sesler Kapalı'}</span>
                   </button>
@@ -177,7 +185,8 @@ export const SiteSettingsView: React.FC<SiteSettingsViewProps> = ({ currentUser 
                 <button
                   type="submit"
                   disabled={savingSettings}
-                  className="w-full py-3 rounded-xl bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-500 hover:from-amber-300 hover:to-yellow-400 text-slate-950 font-black text-xs tracking-wide shadow-lg shadow-amber-500/30 cursor-pointer disabled:opacity-50 transition-all border border-amber-300"
+                  className="w-full py-3 rounded-xl font-black text-xs tracking-wide cursor-pointer disabled:opacity-50 transition-all"
+                  style={{ background: 'linear-gradient(135deg, #ffb938, #e6a020)', color: '#1a1d1e', boxShadow: '0 6px 20px rgba(255,185,56,0.30)', border: '1px solid #ffd080' }}
                 >
                   {savingSettings ? 'AYARLAR KAYDEDİLİYOR...' : 'GENEL AYARLARI KAYDET'}
                 </button>
@@ -188,29 +197,29 @@ export const SiteSettingsView: React.FC<SiteSettingsViewProps> = ({ currentUser 
 
         {/* SAĞ: Database Optimizasyonu ve Temizleme */}
         <div className="lg:col-span-5 space-y-6">
-          <div className="bg-slate-900/90 border border-amber-500/30 rounded-3xl p-6 shadow-2xl space-y-4 relative overflow-hidden">
-            <div className="absolute top-0 right-0 p-8 bg-amber-500/5 rounded-full blur-2xl pointer-events-none" />
+          <div className="rounded-3xl p-6 shadow-2xl space-y-4 relative overflow-hidden" style={{ backgroundColor: 'rgba(34,38,42,0.9)', border: '1px solid rgba(255,185,56,0.20)' }}>
+            <div className="absolute top-0 right-0 p-8 rounded-full blur-2xl pointer-events-none" style={{ backgroundColor: 'rgba(255,185,56,0.04)' }} />
 
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <div className="flex items-center gap-2 text-sm font-extrabold text-amber-400">
-                <Database className="w-4 h-4 text-amber-400" />
+            <div className="flex items-center justify-between pb-3" style={{ borderBottom: '1px solid #343a40' }}>
+              <div className="flex items-center gap-2 text-sm font-extrabold" style={{ color: '#ffb938' }}>
+                <Database className="w-4 h-4" style={{ color: '#ffb938' }} />
                 <span>Veritabanı Optimizasyonu</span>
               </div>
-              <span className="text-[10px] px-2.5 py-1 rounded-full bg-amber-500 text-slate-950 font-black uppercase tracking-wider">
+              <span className="text-[10px] px-2.5 py-1 rounded-full font-black uppercase tracking-wider" style={{ backgroundColor: '#ffb938', color: '#1a1d1e' }}>
                 Süper Admin
               </span>
             </div>
 
             <p className="text-xs text-slate-200 leading-relaxed font-medium">
-              Veritabanını optimize ederek performansı artırır. Sistemdeki eski sorun kayıtlarını, logları, bildirimleri ve <b className="text-amber-400">Süper Admin hariç tüm kullanıcıları</b> kalıcı olarak temizler.
+              Veritabanını optimize ederek performansı artırır. Sistemdeki eski sorun kayıtlarını, logları, bildirimleri ve <b style={{ color: '#ffb938' }}>Süper Admin hariç tüm kullanıcıları</b> kalıcı olarak temizler.
             </p>
 
-            <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 text-[11px] text-slate-300 space-y-2">
-              <div className="font-extrabold text-amber-400 flex items-center gap-1.5">
+            <div className="p-3.5 rounded-2xl text-[11px] space-y-2" style={{ backgroundColor: '#1a1d1e', border: '1px solid #343a40', color: '#c0c8d0' }}>
+              <div className="font-extrabold flex items-center gap-1.5" style={{ color: '#ffb938' }}>
                 <AlertTriangle className="w-4 h-4 shrink-0" />
                 <span>Optimizasyon İşlemi Neleri Kapsar?</span>
               </div>
-              <ul className="list-disc list-inside space-y-1 text-slate-300 text-[11px]">
+              <ul className="list-disc list-inside space-y-1 text-[11px]">
                 <li>Sistemdeki tüm bilet ve sorun bildirimleri silinir.</li>
                 <li>Tüm kullanıcı bildirimleri temizlenir.</li>
                 <li><b>Süper Admin hariç</b> tüm Db Editör, Damage ve GM hesapları kaldırılır.</li>
@@ -221,13 +230,14 @@ export const SiteSettingsView: React.FC<SiteSettingsViewProps> = ({ currentUser 
             {currentUser.role === 'super_admin' ? (
               <button
                 onClick={() => setConfirmModalOpen(true)}
-                className="w-full py-3 rounded-xl bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-500 hover:from-amber-300 hover:to-yellow-400 text-slate-950 font-black text-xs tracking-wide shadow-lg shadow-amber-500/30 transition-all flex items-center justify-center gap-2 cursor-pointer border border-amber-300"
+                className="w-full py-3 rounded-xl font-black text-xs tracking-wide transition-all flex items-center justify-center gap-2 cursor-pointer"
+                style={{ background: 'linear-gradient(135deg, #ffb938, #e6a020)', color: '#1a1d1e', boxShadow: '0 6px 20px rgba(255,185,56,0.28)', border: '1px solid #ffd080' }}
               >
-                <Trash2 className="w-4 h-4 text-slate-950" />
+                <Trash2 className="w-4 h-4" style={{ color: '#1a1d1e' }} />
                 <span>VERİTABANI OPTİMİZASYONUNU BAŞLAT</span>
               </button>
             ) : (
-              <div className="p-3 rounded-xl bg-slate-950 text-slate-400 text-center text-xs font-bold border border-slate-800">
+              <div className="p-3 rounded-xl text-center text-xs font-bold" style={{ backgroundColor: '#1a1d1e', color: '#8a9099', border: '1px solid #343a40' }}>
                 🔒 Bu işlem sadece Süper Admin yetkisine açıktır.
               </div>
             )}
@@ -237,15 +247,15 @@ export const SiteSettingsView: React.FC<SiteSettingsViewProps> = ({ currentUser 
 
       {/* CONFIRMATION MODAL FOR DATABASE CLEANING */}
       {confirmModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="w-full max-w-md bg-slate-900 border-2 border-amber-500 rounded-3xl p-6 shadow-2xl space-y-4">
-            <div className="flex items-center gap-3 border-b border-slate-800 pb-3">
-              <div className="p-2.5 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-500/40">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-md animate-in fade-in duration-200" style={{ backgroundColor: 'rgba(26,29,30,0.88)' }}>
+          <div className="w-full max-w-md rounded-3xl p-6 shadow-2xl space-y-4" style={{ backgroundColor: '#22262a', border: '2px solid #ffb938' }}>
+            <div className="flex items-center gap-3 pb-3" style={{ borderBottom: '1px solid #343a40' }}>
+              <div className="p-2.5 rounded-2xl" style={{ backgroundColor: 'rgba(255,185,56,0.15)', color: '#ffb938', border: '1px solid rgba(255,185,56,0.35)' }}>
                 <AlertTriangle className="w-6 h-6" />
               </div>
               <div>
                 <h3 className="text-base font-black text-white">Kritik İşlem Onayı</h3>
-                <span className="text-xs text-amber-400 font-bold">Veritabanı Verileri Silinecek</span>
+                <span className="text-xs font-bold" style={{ color: '#ffb938' }}>Veritabanı Verileri Silinecek</span>
               </div>
             </div>
 
@@ -257,7 +267,10 @@ export const SiteSettingsView: React.FC<SiteSettingsViewProps> = ({ currentUser 
               <button
                 onClick={() => setConfirmModalOpen(false)}
                 disabled={cleaningDb}
-                className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-extrabold text-slate-200 transition-colors cursor-pointer disabled:opacity-50"
+                className="px-4 py-2.5 rounded-xl text-xs font-extrabold transition-colors cursor-pointer disabled:opacity-50"
+                style={{ backgroundColor: '#2a2f34', color: '#c0c8d0', border: '1px solid #343a40' }}
+                onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#333940')}
+                onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#2a2f34')}
               >
                 İptal Et
               </button>
@@ -265,13 +278,14 @@ export const SiteSettingsView: React.FC<SiteSettingsViewProps> = ({ currentUser 
               <button
                 onClick={handleCleanDatabase}
                 disabled={cleaningDb}
-                className="px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs shadow-lg shadow-amber-500/30 transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50 border border-amber-300"
+                className="px-5 py-2.5 rounded-xl font-black text-xs transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                style={{ backgroundColor: '#ffb938', color: '#1a1d1e', boxShadow: '0 4px 16px rgba(255,185,56,0.30)', border: '1px solid #ffd080' }}
               >
                 {cleaningDb ? (
                   <span>Optimizasyon Yapılıyor...</span>
                 ) : (
                   <>
-                    <Trash2 className="w-4 h-4 text-slate-950" />
+                    <Trash2 className="w-4 h-4" style={{ color: '#1a1d1e' }} />
                     <span>EVET, TEMİZLE VE OPTİMİZE ET</span>
                   </>
                 )}

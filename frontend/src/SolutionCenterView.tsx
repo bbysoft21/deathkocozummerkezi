@@ -3,8 +3,7 @@ import {
   Search, 
   Plus, 
   Clock, 
-  CheckCircle2, 
-  AlertCircle, 
+  CheckCircle2,
   User, 
   UserCheck,
   RefreshCw,
@@ -222,6 +221,28 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
     }
   };
 
+  const handleDropStatusChange = async (ticketId: number, newStatus: string) => {
+    try {
+      const token = localStorage.getItem('auth_token');
+      // Optimistic UI Update (Sürükler sürüklemez ekranda anında taşı)
+      setTickets(prev => prev.map(t => t.id === ticketId ? { ...t, status: newStatus as any } : t));
+
+      const response = await axios.patch(`/api/v1/tickets/${ticketId}/status`, {
+        status: newStatus,
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      if (response.data.success) {
+        fetchData();
+        if (onTicketUpdated) onTicketUpdated();
+      }
+    } catch (err: any) {
+      console.error('Drag & Drop status update error:', err);
+      fetchData(); // Hata durumunda eski verileri geri yükle
+    }
+  };
+
   const handleUpdateStatus = async (status: string) => {
     if (!selectedTicket) return;
     setUpdatingStatus(true);
@@ -366,130 +387,369 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
         </div>
       </div>
 
-      {/* Tickets Grid Cards Layout */}
-      <div>
-        {loading ? (
-          <div className="p-12 text-center text-slate-500 text-xs">Yükleniyor...</div>
-        ) : filteredTickets.length === 0 ? (
-          <div className="p-12 text-center rounded-3xl bg-slate-900/40 border border-slate-800 space-y-2">
-            <AlertCircle className="w-8 h-8 text-slate-600 mx-auto" />
-            <div className="text-sm font-semibold text-slate-400">Bu merkezde bildirim bulunamadı</div>
-            <p className="text-xs text-slate-500">Yeni bir sorun bildirimi oluşturabilirsiniz.</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {filteredTickets.map((t) => (
+      {/* 3'lü Sütun Yapısı: Solda Beklemede (Açık), Ortada İşlemde Olan, Sağda Çözüldü */}
+      {loading ? (
+        <div className="p-12 text-center text-slate-500 text-xs">Yükleniyor...</div>
+      ) : (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          
+          {/* 1. SÜTUN: BEKLEMEDE OLANLAR (open) */}
+          {(() => {
+            const pendingTickets = filteredTickets.filter(t => t.status === 'open');
+            return (
               <div 
-                key={t.id}
-                onClick={() => { setSelectedTicket(t); setAdminResponseText(t.admin_response || ''); }}
-                className="p-5 rounded-3xl bg-slate-900/70 border border-slate-800 hover:border-amber-500/50 transition-all duration-200 cursor-pointer flex flex-col justify-between space-y-4 group hover:shadow-xl hover:shadow-amber-500/5 relative overflow-hidden"
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  const ticketId = e.dataTransfer.getData('ticketId');
+                  if (ticketId) handleDropStatusChange(Number(ticketId), 'open');
+                }}
+                className="space-y-4 bg-slate-900/40 p-4 rounded-3xl border border-slate-800/80 min-h-[350px] transition-colors hover:border-amber-500/30"
               >
-                {/* Card Top Badges & Image Indicator */}
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      {getStatusBadge(t.status)}
-                      {getPriorityBadge(t.priority)}
-                    </div>
-                    <span className="text-[10px] text-slate-500 font-mono">#{t.uuid.substring(0, 8)}</span>
+                <div className="flex items-center justify-between px-2 pb-2 border-b border-slate-800">
+                  <div className="flex items-center gap-2 text-amber-400 font-bold text-sm">
+                    <Clock className="w-4 h-4" />
+                    <span>Beklemede Olanlar</span>
                   </div>
-
-                  {/* Subject Title */}
-                  <h3 className="text-base font-bold text-white group-hover:text-amber-400 transition-colors line-clamp-2 leading-snug">
-                    {t.subject}
-                  </h3>
-
-                  {/* Message Preview */}
-                  <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
-                    {t.message}
-                  </p>
+                  <span className="px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs font-bold">
+                    {pendingTickets.length}
+                  </span>
                 </div>
 
-                {/* Card Bottom Meta Info */}
-                <div className="pt-3 border-t border-slate-800/80 space-y-2 text-xs">
-                  
-                  {/* Category & Image Badge */}
-                  <div className="flex items-center justify-between gap-2">
-                    {t.category ? (
-                      <span className="px-2 py-0.5 rounded-md bg-slate-950 text-slate-300 text-[10px] border border-slate-800 font-medium">
-                        {t.category.name}
-                      </span>
-                    ) : <span />}
-
-                    {t.image_path && (
-                      <span className="px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[10px] font-semibold flex items-center gap-1">
-                        <ImageIcon className="w-3 h-3" /> Görsel
-                      </span>
-                    )}
+                {pendingTickets.length === 0 ? (
+                  <div className="p-8 text-center text-slate-500 text-xs bg-slate-950/40 rounded-2xl border border-slate-800/40 border-dashed">
+                    Bekleyen talep yok (Buraya sürükleyebilirsiniz)
                   </div>
+                ) : (
+                  <div className="space-y-4">
+                    {pendingTickets.map((t) => (
+                      <div 
+                        key={t.id}
+                        draggable
+                        onDragStart={(e) => {
+                          e.dataTransfer.setData('ticketId', String(t.id));
+                        }}
+                        onClick={() => { setSelectedTicket(t); setAdminResponseText(t.admin_response || ''); }}
+                        className="p-5 rounded-3xl bg-slate-900/70 border border-slate-800 hover:border-amber-500/50 transition-all duration-200 cursor-grab active:cursor-grabbing flex flex-col justify-between space-y-4 group hover:shadow-xl hover:shadow-amber-500/5 relative overflow-hidden"
+                      >
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between gap-2">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              {getStatusBadge(t.status)}
+                              {getPriorityBadge(t.priority)}
+                            </div>
+                            <span className="text-[10px] text-slate-500 font-mono">#{t.uuid.substring(0, 8)}</span>
+                          </div>
 
-                  {/* Creator & Assigned Info */}
-                  <div className="flex items-center justify-between text-[11px] text-slate-400">
-                    <span className="flex items-center gap-1.5 truncate">
-                      <User className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                      <span className="truncate">Açan: <b className="text-slate-200">{t.user?.name || 'Anonim'}</b></span>
-                    </span>
-                    <span className="flex items-center gap-1 shrink-0 text-[10px] text-slate-500">
-                      <Calendar className="w-3 h-3" />
-                      {new Date(t.created_at).toLocaleDateString('tr-TR')}
-                    </span>
+                          <h3 className="text-base font-bold text-white group-hover:text-amber-400 transition-colors line-clamp-2 leading-snug">
+                            {t.subject}
+                          </h3>
+
+                          <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
+                            {t.message}
+                          </p>
+                        </div>
+
+                        <div className="pt-3 border-t border-slate-800/80 space-y-2 text-xs">
+                          <div className="flex items-center justify-between gap-2">
+                            {t.category ? (
+                              <span className="px-2 py-0.5 rounded-md bg-slate-950 text-slate-300 text-[10px] border border-slate-800 font-medium">
+                                {t.category.name}
+                              </span>
+                            ) : <span />}
+
+                            {t.image_path && (
+                              <span className="px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[10px] font-semibold flex items-center gap-1">
+                                <ImageIcon className="w-3 h-3" /> Görsel
+                              </span>
+                            )}
+                          </div>
+
+                          <div className="flex items-center justify-between text-[11px] text-slate-400">
+                            <span className="flex items-center gap-1.5 truncate">
+                              <User className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                              <span className="truncate">Açan: <b className="text-slate-200">{t.user?.name || 'Anonim'}</b></span>
+                            </span>
+                            <span className="flex items-center gap-1 shrink-0 text-[10px] text-slate-500">
+                              <Calendar className="w-3 h-3" />
+                              {new Date(t.created_at).toLocaleDateString('tr-TR')}
+                            </span>
+                          </div>
+
+                          {t.assignedTo && (
+                            <div className="flex items-center justify-between text-[11px] text-cyan-400 pt-1.5 border-t border-slate-800/40">
+                              <span className="flex items-center gap-1.5 truncate">
+                                <UserCheck className="w-3.5 h-3.5 shrink-0 text-cyan-400" />
+                                <span className="truncate">
+                                  Atanan Yetkili: <b className="text-cyan-300">{t.assignedTo.name}</b>
+                                </span>
+                              </span>
+                            </div>
+                          )}
+
+                          {t.reassignedFrom && (
+                            <div className="flex items-center justify-between text-[10px] text-amber-400/90 pt-1">
+                              <span className="flex items-center gap-1 truncate">
+                                <RefreshCw className="w-3 h-3 text-amber-400 shrink-0" />
+                                <span className="truncate">Devreden: <b>{t.reassignedFrom.name}</b></span>
+                              </span>
+                              {t.reassigned_at && (
+                                <span className="text-[9px] text-slate-500">
+                                  {new Date(t.reassigned_at).toLocaleDateString('tr-TR')}
+                                </span>
+                              )}
+                            </div>
+                          )}
+
+                          <div className="pt-2 text-right">
+                            <span className="text-xs text-amber-400 font-semibold group-hover:underline inline-flex items-center gap-1">
+                              İncele & Yanıtla &rarr;
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-
-                  {/* Assigned To User Badge */}
-                  {t.assignedTo && (
-                    <div className="flex items-center justify-between text-[11px] text-cyan-400 pt-1.5 border-t border-slate-800/40">
-                      <span className="flex items-center gap-1.5 truncate">
-                        <UserCheck className="w-3.5 h-3.5 shrink-0 text-cyan-400" />
-                        <span className="truncate">
-                          Atanan Yetkili: <b className="text-cyan-300">{t.assignedTo.name}</b> ({t.assignedTo.role === 'admin' ? 'Db Editör' : t.assignedTo.role === 'damage_editor' ? 'Damage Sorumlusu' : t.assignedTo.role === 'guide_editor' ? 'Rehber Sorumlusu' : 'Yönetici'})
-                        </span>
-                      </span>
-                    </div>
-                  )}
-
-                  {/* Devredilen Eski Yetkili Rozeti */}
-                  {t.reassignedFrom && (
-                    <div className="flex items-center justify-between text-[10px] text-amber-400/90 pt-1">
-                      <span className="flex items-center gap-1 truncate">
-                        <RefreshCw className="w-3 h-3 text-amber-400 shrink-0" />
-                        <span className="truncate">Devreden: <b>{t.reassignedFrom.name}</b></span>
-                      </span>
-                      {t.reassigned_at && (
-                        <span className="text-[9px] text-slate-500">
-                          {new Date(t.reassigned_at).toLocaleDateString('tr-TR')}
-                        </span>
-                      )}
-                    </div>
-                  )}
-
-                  {/* Resolver Info if resolved */}
-                  {t.resolver && (
-                    <div className="flex items-center justify-between text-[11px] text-emerald-400 pt-1 border-t border-slate-800/40">
-                      <span className="flex items-center gap-1.5 truncate">
-                        <UserCheck className="w-3.5 h-3.5 shrink-0" />
-                        <span className="truncate">Çözen: <b className="text-emerald-300">{t.resolver.name}</b></span>
-                      </span>
-                      {t.resolved_at && (
-                        <span className="text-[10px] text-emerald-400/80">
-                          {new Date(t.resolved_at).toLocaleDateString('tr-TR')}
-                        </span>
-                      )}
-                    </div>
-                  )}
-
-                  {/* Action Link */}
-                  <div className="pt-2 text-right">
-                    <span className="text-xs text-amber-400 font-semibold group-hover:underline inline-flex items-center gap-1">
-                      İncele & Yanıtla &rarr;
-                    </span>
-                  </div>
-
-                </div>
+                )}
               </div>
-            ))}
-          </div>
-        )}
-      </div>
+            );
+          })()}
+
+          {/* 2. SÜTUN: İŞLEMDE OLANLAR (in_progress) */}
+          {(() => {
+            const inProgressTickets = filteredTickets.filter(t => t.status === 'in_progress');
+            return (
+              <div 
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  const ticketId = e.dataTransfer.getData('ticketId');
+                  if (ticketId) handleDropStatusChange(Number(ticketId), 'in_progress');
+                }}
+                className="space-y-4 bg-slate-900/40 p-4 rounded-3xl border border-slate-800/80 min-h-[350px] transition-colors hover:border-cyan-500/30"
+              >
+                <div className="flex items-center justify-between px-2 pb-2 border-b border-slate-800">
+                  <div className="flex items-center gap-2 text-cyan-400 font-bold text-sm">
+                    <RefreshCw className="w-4 h-4 animate-spin" />
+                    <span>İşlemde Olanlar</span>
+                  </div>
+                  <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 text-xs font-bold">
+                    {inProgressTickets.length}
+                  </span>
+                </div>
+
+                {inProgressTickets.length === 0 ? (
+                  <div className="p-8 text-center text-slate-500 text-xs bg-slate-950/40 rounded-2xl border border-slate-800/40 border-dashed">
+                    İşlemde olan talep yok (Buraya sürükleyebilirsiniz)
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {inProgressTickets.map((t) => (
+                      <div 
+                        key={t.id}
+                        draggable
+                        onDragStart={(e) => {
+                          e.dataTransfer.setData('ticketId', String(t.id));
+                        }}
+                        onClick={() => { setSelectedTicket(t); setAdminResponseText(t.admin_response || ''); }}
+                        className="p-5 rounded-3xl bg-slate-900/70 border border-slate-800 hover:border-cyan-500/50 transition-all duration-200 cursor-grab active:cursor-grabbing flex flex-col justify-between space-y-4 group hover:shadow-xl hover:shadow-cyan-500/5 relative overflow-hidden"
+                      >
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between gap-2">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              {getStatusBadge(t.status)}
+                              {getPriorityBadge(t.priority)}
+                            </div>
+                            <span className="text-[10px] text-slate-500 font-mono">#{t.uuid.substring(0, 8)}</span>
+                          </div>
+
+                          <h3 className="text-base font-bold text-white group-hover:text-cyan-400 transition-colors line-clamp-2 leading-snug">
+                            {t.subject}
+                          </h3>
+
+                          <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
+                            {t.message}
+                          </p>
+                        </div>
+
+                        <div className="pt-3 border-t border-slate-800/80 space-y-2 text-xs">
+                          <div className="flex items-center justify-between gap-2">
+                            {t.category ? (
+                              <span className="px-2 py-0.5 rounded-md bg-slate-950 text-slate-300 text-[10px] border border-slate-800 font-medium">
+                                {t.category.name}
+                              </span>
+                            ) : <span />}
+
+                            {t.image_path && (
+                              <span className="px-2 py-0.5 rounded-md bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 text-[10px] font-semibold flex items-center gap-1">
+                                <ImageIcon className="w-3 h-3" /> Görsel
+                              </span>
+                            )}
+                          </div>
+
+                          <div className="flex items-center justify-between text-[11px] text-slate-400">
+                            <span className="flex items-center gap-1.5 truncate">
+                              <User className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                              <span className="truncate">Açan: <b className="text-slate-200">{t.user?.name || 'Anonim'}</b></span>
+                            </span>
+                            <span className="flex items-center gap-1 shrink-0 text-[10px] text-slate-500">
+                              <Calendar className="w-3 h-3" />
+                              {new Date(t.created_at).toLocaleDateString('tr-TR')}
+                            </span>
+                          </div>
+
+                          {t.assignedTo && (
+                            <div className="flex items-center justify-between text-[11px] text-cyan-400 pt-1.5 border-t border-slate-800/40">
+                              <span className="flex items-center gap-1.5 truncate">
+                                <UserCheck className="w-3.5 h-3.5 shrink-0 text-cyan-400" />
+                                <span className="truncate">
+                                  Atanan Yetkili: <b className="text-cyan-300">{t.assignedTo.name}</b>
+                                </span>
+                              </span>
+                            </div>
+                          )}
+
+                          {t.reassignedFrom && (
+                            <div className="flex items-center justify-between text-[10px] text-amber-400/90 pt-1">
+                              <span className="flex items-center gap-1 truncate">
+                                <RefreshCw className="w-3 h-3 text-amber-400 shrink-0" />
+                                <span className="truncate">Devreden: <b>{t.reassignedFrom.name}</b></span>
+                              </span>
+                              {t.reassigned_at && (
+                                <span className="text-[9px] text-slate-500">
+                                  {new Date(t.reassigned_at).toLocaleDateString('tr-TR')}
+                                </span>
+                              )}
+                            </div>
+                          )}
+
+                          <div className="pt-2 text-right">
+                            <span className="text-xs text-cyan-400 font-semibold group-hover:underline inline-flex items-center gap-1">
+                              İncele & Yanıtla &rarr;
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })()}
+
+          {/* 3. SÜTUN: ÇÖZÜLDÜ (resolved veya closed) */}
+          {(() => {
+            const resolvedTickets = filteredTickets.filter(t => t.status === 'resolved' || t.status === 'closed');
+            return (
+              <div 
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  const ticketId = e.dataTransfer.getData('ticketId');
+                  if (ticketId) handleDropStatusChange(Number(ticketId), 'resolved');
+                }}
+                className="space-y-4 bg-slate-900/40 p-4 rounded-3xl border border-slate-800/80 min-h-[350px] transition-colors hover:border-emerald-500/30"
+              >
+                <div className="flex items-center justify-between px-2 pb-2 border-b border-slate-800">
+                  <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm">
+                    <CheckCircle2 className="w-4 h-4" />
+                    <span>Çözüldü</span>
+                  </div>
+                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-bold">
+                    {resolvedTickets.length}
+                  </span>
+                </div>
+
+                {resolvedTickets.length === 0 ? (
+                  <div className="p-8 text-center text-slate-500 text-xs bg-slate-950/40 rounded-2xl border border-slate-800/40 border-dashed">
+                    Çözülmüş talep yok (Buraya sürükleyebilirsiniz)
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {resolvedTickets.map((t) => (
+                      <div 
+                        key={t.id}
+                        draggable
+                        onDragStart={(e) => {
+                          e.dataTransfer.setData('ticketId', String(t.id));
+                        }}
+                        onClick={() => { setSelectedTicket(t); setAdminResponseText(t.admin_response || ''); }}
+                        className="p-5 rounded-3xl bg-slate-900/70 border border-slate-800 hover:border-emerald-500/50 transition-all duration-200 cursor-grab active:cursor-grabbing flex flex-col justify-between space-y-4 group hover:shadow-xl hover:shadow-emerald-500/5 relative overflow-hidden"
+                      >
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between gap-2">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              {getStatusBadge(t.status)}
+                              {getPriorityBadge(t.priority)}
+                            </div>
+                            <span className="text-[10px] text-slate-500 font-mono">#{t.uuid.substring(0, 8)}</span>
+                          </div>
+
+                          <h3 className="text-base font-bold text-white group-hover:text-emerald-400 transition-colors line-clamp-2 leading-snug">
+                            {t.subject}
+                          </h3>
+
+                          <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
+                            {t.message}
+                          </p>
+                        </div>
+
+                        <div className="pt-3 border-t border-slate-800/80 space-y-2 text-xs">
+                          <div className="flex items-center justify-between gap-2">
+                            {t.category ? (
+                              <span className="px-2 py-0.5 rounded-md bg-slate-950 text-slate-300 text-[10px] border border-slate-800 font-medium">
+                                {t.category.name}
+                              </span>
+                            ) : <span />}
+
+                            {t.image_path && (
+                              <span className="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-semibold flex items-center gap-1">
+                                <ImageIcon className="w-3 h-3" /> Görsel
+                              </span>
+                            )}
+                          </div>
+
+                          <div className="flex items-center justify-between text-[11px] text-slate-400">
+                            <span className="flex items-center gap-1.5 truncate">
+                              <User className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                              <span className="truncate">Açan: <b className="text-slate-200">{t.user?.name || 'Anonim'}</b></span>
+                            </span>
+                            <span className="flex items-center gap-1 shrink-0 text-[10px] text-slate-500">
+                              <Calendar className="w-3 h-3" />
+                              {new Date(t.created_at).toLocaleDateString('tr-TR')}
+                            </span>
+                          </div>
+
+                          {t.resolver && (
+                            <div className="flex items-center justify-between text-[11px] text-emerald-400 pt-1 border-t border-slate-800/40">
+                              <span className="flex items-center gap-1.5 truncate">
+                                <UserCheck className="w-3.5 h-3.5 shrink-0" />
+                                <span className="truncate">Çözen: <b className="text-emerald-300">{t.resolver.name}</b></span>
+                              </span>
+                              {t.resolved_at && (
+                                <span className="text-[10px] text-emerald-400/80">
+                                  {new Date(t.resolved_at).toLocaleDateString('tr-TR')}
+                                </span>
+                              )}
+                            </div>
+                          )}
+
+                          <div className="pt-2 text-right">
+                            <span className="text-xs text-emerald-400 font-semibold group-hover:underline inline-flex items-center gap-1">
+                              İncele & Yanıtla &rarr;
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })()}
+
+        </div>
+      )}
 
       {/* New Ticket Modal (Pop-up): Order: Başlık -> Kategori -> Mesaj -> Görsel Ekleme */}
       {isModalOpen && (

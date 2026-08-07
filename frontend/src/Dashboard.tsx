@@ -273,29 +273,32 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-amber-500 selection:text-slate-950">
+    <div className="min-h-screen flex flex-col font-sans" style={{ backgroundColor: '#1a1d1e', color: '#f0f2f4' }}>
       
       {/* Top Navbar */}
-      <header className="h-16 border-b border-slate-800/80 bg-slate-900/60 backdrop-blur-xl sticky top-0 z-50 flex items-center justify-between px-6">
+      <header className="h-16 sticky top-0 z-50 flex items-center justify-between px-6 backdrop-blur-xl" style={{ backgroundColor: 'rgba(26,29,30,0.92)', borderBottom: '1px solid rgba(52,58,64,0.7)' }}>
         
         {/* Brand */}
         <div className="flex items-center gap-3 cursor-pointer" onClick={() => setActivePage('dashboard')}>
-          <div className="p-2 rounded-xl bg-gradient-to-tr from-amber-500 to-yellow-400 text-slate-950 font-bold shadow-lg shadow-amber-500/20">
+          <div className="p-2 rounded-xl font-bold" style={{ background: 'linear-gradient(135deg, #ffb938, #ffd080)', color: '#1a1d1e', boxShadow: '0 4px 16px rgba(255,185,56,0.22)' }}>
             <Gamepad2 className="w-5 h-5" />
           </div>
           <div>
             <span className="text-base font-extrabold text-white tracking-wide">DeathKO</span>
-            <span className="text-xs text-amber-400 block -mt-1 font-semibold">Çözüm Merkezi</span>
+            <span className="text-xs block -mt-1 font-semibold" style={{ color: '#ffb938' }}>Çözüm Merkezi</span>
           </div>
         </div>
 
         {/* Global Search Bar */}
         <div className="hidden md:flex items-center w-96 relative">
-          <Search className="w-4 h-4 text-slate-500 absolute left-3.5" />
+          <Search className="w-4 h-4 absolute left-3.5" style={{ color: '#8a9099' }} />
           <input
             type="text"
             placeholder="Destek talebi, sorun konusu ara..."
-            className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-950/80 border border-slate-800 text-xs text-slate-200 focus:outline-none focus:border-amber-500/50 transition-all placeholder:text-slate-600"
+            className="w-full pl-10 pr-4 py-2 rounded-xl text-xs text-slate-200 focus:outline-none transition-all placeholder:text-[#5a6270]"
+            style={{ backgroundColor: 'rgba(26,29,30,0.9)', border: '1px solid #343a40' }}
+            onFocus={e => (e.currentTarget.style.borderColor = 'rgba(255,185,56,0.5)')}
+            onBlur={e => (e.currentTarget.style.borderColor = '#343a40')}
           />
         </div>
 
@@ -306,23 +309,26 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
           <div className="relative">
             <button 
               onClick={() => setIsNotifDropdownOpen(!isNotifDropdownOpen)}
-              className="relative p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white hover:border-slate-700 transition-all cursor-pointer"
+              className="relative p-2 rounded-xl transition-all cursor-pointer"
+              style={{ backgroundColor: '#22262a', border: '1px solid #343a40', color: '#8a9099' }}
+              onMouseEnter={e => { e.currentTarget.style.color = '#fff'; e.currentTarget.style.borderColor = '#3f4750'; }}
+              onMouseLeave={e => { e.currentTarget.style.color = '#8a9099'; e.currentTarget.style.borderColor = '#343a40'; }}
             >
               <Bell className="w-4 h-4" />
               {notifications.some(n => !n.is_read) && (
                 <>
-                  <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-amber-500 animate-ping" />
-                  <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-amber-500" />
+                  <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full animate-ping" style={{ backgroundColor: '#ffb938' }} />
+                  <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full" style={{ backgroundColor: '#ffb938' }} />
                 </>
               )}
             </button>
 
             {/* Notification Dropdown Box */}
             {isNotifDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-80 p-3 rounded-2xl bg-slate-900 border border-slate-800 shadow-2xl z-50 space-y-2">
-                <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+              <div className="absolute right-0 mt-2 w-80 p-3 rounded-2xl shadow-2xl z-50 space-y-2" style={{ backgroundColor: '#22262a', border: '1px solid #343a40' }}>
+                <div className="flex items-center justify-between pb-2" style={{ borderBottom: '1px solid #343a40' }}>
                   <span className="text-xs font-bold text-white">Özel Bildirimleriniz</span>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 font-semibold">
+                  <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold" style={{ backgroundColor: 'rgba(255,185,56,0.15)', color: '#ffb938' }}>
                     {notifications.filter(n => !n.is_read).length} Yeni
                   </span>
                 </div>
@@ -335,15 +341,15 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                       <div 
                         key={n.id}
                         onClick={() => markNotificationRead(n.id)}
-                        className={`p-2.5 rounded-xl border text-xs space-y-1 cursor-pointer transition-colors ${
-                          n.is_read 
-                            ? 'bg-slate-950/40 border-slate-900 text-slate-400' 
-                            : 'bg-amber-500/10 border-amber-500/30 text-slate-100 font-medium'
-                        }`}
+                        className="p-2.5 rounded-xl text-xs space-y-1 cursor-pointer transition-colors"
+                        style={n.is_read
+                          ? { backgroundColor: 'rgba(26,29,30,0.5)', border: '1px solid #2a2f34', color: '#8a9099' }
+                          : { backgroundColor: 'rgba(255,185,56,0.08)', border: '1px solid rgba(255,185,56,0.25)', color: '#f0f2f4', fontWeight: 500 }
+                        }
                       >
                         <div className="flex items-center justify-between">
                           <span className="font-bold text-white">{n.title}</span>
-                          {!n.is_read && <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />}
+                          {!n.is_read && <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#ffb938' }} />}
                         </div>
                         <p className="text-[11px] leading-relaxed text-slate-300">{n.message}</p>
                         <span className="text-[9px] text-slate-500 block pt-1">{new Date(n.created_at).toLocaleString('tr-TR')}</span>
@@ -356,10 +362,11 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
           </div>
 
           {/* User Profile Dropdown */}
-          <div className="relative pl-3 border-l border-slate-800">
+          <div className="relative pl-3" style={{ borderLeft: '1px solid #343a40' }}>
             <div 
               onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
-              className="flex items-center gap-3 cursor-pointer p-1 rounded-xl hover:bg-slate-900 transition-colors"
+              className="flex items-center gap-3 cursor-pointer p-1 rounded-xl transition-colors"
+              style={{}} onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#22262a')} onMouseLeave={e => (e.currentTarget.style.backgroundColor = '')}
             >
               {user.avatar ? (
                 <img 
@@ -372,30 +379,30 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                       ((e.target as HTMLElement).nextElementSibling as HTMLElement).style.display = 'flex';
                     }
                   }}
-                  className="w-9 h-9 rounded-xl object-cover border border-amber-500/40 shadow-sm" 
+                  className="w-9 h-9 rounded-xl object-cover shadow-sm" style={{ border: '1px solid rgba(255,185,56,0.35)' }}
                 />
               ) : null}
               <div 
-                style={{ display: user.avatar ? 'none' : 'flex' }}
-                className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500/20 to-yellow-500/20 border border-amber-500/30 items-center justify-center font-bold text-amber-400 text-sm"
+                className="w-9 h-9 rounded-xl items-center justify-center font-bold text-sm"
+                style={{ display: user.avatar ? 'none' : 'flex', background: 'rgba(255,185,56,0.12)', border: '1px solid rgba(255,185,56,0.25)', color: '#ffb938' }}
               >
                 {user.name.charAt(0)}
               </div>
               <div className="hidden sm:block text-left">
                 <div className="text-xs font-semibold text-white flex items-center gap-1">
                   <span>{user.name}</span>
-                  <span className="text-[9px] text-amber-400">▼</span>
+                  <span className="text-[9px]" style={{ color: '#ffb938' }}>▼</span>
                 </div>
-                <div className="text-[10px] text-amber-400 uppercase font-bold tracking-wider">{user.role}</div>
+                <div className="text-[10px] uppercase font-bold tracking-wider" style={{ color: '#ffb938' }}>{user.role}</div>
               </div>
             </div>
 
             {/* Profile & Password Edit Dropdown Box */}
             {isProfileDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-80 p-4 rounded-3xl bg-slate-900 border border-slate-800 shadow-2xl z-50 space-y-3 animate-in fade-in zoom-in-95 duration-150">
-                <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+              <div className="absolute right-0 mt-2 w-80 p-4 rounded-3xl shadow-2xl z-50 space-y-3 animate-in fade-in zoom-in-95 duration-150" style={{ backgroundColor: '#22262a', border: '1px solid #343a40' }}>
+                <div className="flex items-center justify-between pb-2" style={{ borderBottom: '1px solid #343a40' }}>
                   <div className="text-xs font-extrabold text-white flex items-center gap-1.5">
-                    <UserIcon className="w-4 h-4 text-amber-400" />
+                    <UserIcon className="w-4 h-4" style={{ color: '#ffb938' }} />
                     <span>Profil & Şifre Ayarları</span>
                   </div>
                   <button 
@@ -424,7 +431,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                       type="text"
                       disabled
                       value={user.email}
-                      className="w-full px-3 py-1.5 rounded-xl bg-slate-950/50 border border-slate-800/60 text-xs text-slate-500 cursor-not-allowed font-mono"
+                      className="w-full px-3 py-1.5 rounded-xl text-xs cursor-not-allowed font-mono" style={{ backgroundColor: 'rgba(26,29,30,0.6)', border: '1px solid #2a2f34', color: '#8a9099' }}
                     />
                     <span className="text-[9px] text-slate-600 block">Mail adresi güvenlik nedeniyle değiştirilemez.</span>
                   </div>
@@ -437,7 +444,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                       required
                       value={profileName}
                       onChange={(e) => setProfileName(e.target.value)}
-                      className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:outline-none focus:border-amber-500"
+                      className="w-full px-3 py-2 rounded-xl text-xs text-white focus:outline-none" style={{ backgroundColor: '#1a1d1e', border: '1px solid #343a40' }} onFocus={e => (e.currentTarget.style.borderColor = '#ffb938')} onBlur={e => (e.currentTarget.style.borderColor = '#343a40')}
                     />
                   </div>
 
@@ -446,17 +453,17 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                     <label className="text-[10px] font-bold text-slate-300 block">Profil Görseli (Avatar)</label>
 
                     {/* Önizleme Kutusucuğu */}
-                    <div className="flex items-center gap-3 p-2 rounded-xl bg-slate-950 border border-slate-800">
+                    <div className="flex items-center gap-3 p-2 rounded-xl" style={{ backgroundColor: '#1a1d1e', border: '1px solid #343a40' }}>
                       {avatarPreview ? (
-                        <img src={avatarPreview} alt="Avatar Önizleme" className="w-10 h-10 rounded-xl object-cover border border-amber-500/40" />
+                        <img src={avatarPreview} alt="Avatar Önizleme" className="w-10 h-10 rounded-xl object-cover" style={{ border: '1px solid rgba(255,185,56,0.35)' }} />
                       ) : (
-                        <div className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-amber-400 font-bold">
+                        <div className="w-10 h-10 rounded-xl flex items-center justify-center font-bold" style={{ backgroundColor: '#22262a', border: '1px solid #343a40', color: '#ffb938' }}>
                           {profileName.charAt(0)}
                         </div>
                       )}
 
                       <div className="flex-1">
-                        <label className="block text-[10px] font-bold text-amber-400 cursor-pointer bg-amber-500/10 border border-amber-500/30 hover:bg-amber-500/20 px-2.5 py-1 rounded-lg text-center transition-all">
+                        <label className="block text-[10px] font-bold cursor-pointer px-2.5 py-1 rounded-lg text-center transition-all" style={{ backgroundColor: 'rgba(255,185,56,0.08)', border: '1px solid rgba(255,185,56,0.25)', color: '#ffb938' }}>
                           📁 Bilgisayardan Dosya Seç
                           <input
                             type="file"
@@ -477,13 +484,13 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                         setAvatarPreview(e.target.value);
                       }}
                       placeholder="Veya Görsel URL Yapıştırın (https://...)"
-                      className="w-full px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-[11px] text-white focus:outline-none focus:border-amber-500"
+                      className="w-full px-3 py-1.5 rounded-xl text-[11px] text-white focus:outline-none" style={{ backgroundColor: '#1a1d1e', border: '1px solid #343a40' }} onFocus={e => (e.currentTarget.style.borderColor = '#ffb938')} onBlur={e => (e.currentTarget.style.borderColor = '#343a40')}
                     />
                   </div>
 
                   {/* Şifre Değiştirme Alanı */}
-                  <div className="pt-2 border-t border-slate-800/80 space-y-2">
-                    <span className="text-[11px] font-extrabold text-amber-400 flex items-center gap-1">
+                  <div className="pt-2 space-y-2" style={{ borderTop: '1px solid rgba(52,58,64,0.7)' }}>
+                    <span className="text-[11px] font-extrabold flex items-center gap-1" style={{ color: '#ffb938' }}>
                       <KeyRound className="w-3.5 h-3.5" /> Şifre Değiştir
                     </span>
 
@@ -494,7 +501,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                         value={currentPassword}
                         onChange={(e) => setCurrentPassword(e.target.value)}
                         placeholder="Mevcut şifre"
-                        className="w-full px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:outline-none focus:border-amber-500"
+                        className="w-full px-3 py-1.5 rounded-xl text-xs text-white focus:outline-none" style={{ backgroundColor: '#1a1d1e', border: '1px solid #343a40' }} onFocus={e => (e.currentTarget.style.borderColor = '#ffb938')} onBlur={e => (e.currentTarget.style.borderColor = '#343a40')}
                       />
                     </div>
 
@@ -505,12 +512,12 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
                         placeholder="En az 6 karakter"
-                        className="w-full px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:outline-none focus:border-amber-500"
+                        className="w-full px-3 py-1.5 rounded-xl text-xs text-white focus:outline-none" style={{ backgroundColor: '#1a1d1e', border: '1px solid #343a40' }} onFocus={e => (e.currentTarget.style.borderColor = '#ffb938')} onBlur={e => (e.currentTarget.style.borderColor = '#343a40')}
                       />
                     </div>
                   </div>
 
-                  <div className="pt-2 flex items-center justify-between gap-2 border-t border-slate-800">
+                  <div className="pt-2 flex items-center justify-between gap-2" style={{ borderTop: '1px solid #343a40' }}>
                     <button
                       type="button"
                       onClick={onLogout}
@@ -523,7 +530,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                     <button
                       type="submit"
                       disabled={profileSubmitting}
-                      className="px-4 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-extrabold text-xs shadow-md shadow-amber-500/20 cursor-pointer disabled:opacity-50"
+                      className="px-4 py-1.5 rounded-xl font-extrabold text-xs cursor-pointer disabled:opacity-50" style={{ background: 'linear-gradient(135deg, #ffb938, #e6a020)', color: '#1a1d1e', boxShadow: '0 4px 12px rgba(255,185,56,0.25)' }}
                     >
                       {profileSubmitting ? 'Kaydediliyor...' : 'Kaydet'}
                     </button>
@@ -539,12 +546,12 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
       <div className="flex flex-1">
         
         {/* Sidebar Navigation */}
-        <aside className="w-64 border-r border-slate-800/80 bg-slate-900/40 p-4 hidden md:flex flex-col justify-between">
+        <aside className="w-64 p-4 hidden md:flex flex-col justify-between" style={{ borderRight: '1px solid rgba(52,58,64,0.7)', backgroundColor: 'rgba(34,38,42,0.35)' }}>
           <div className="space-y-6">
             
             {/* Solution Center Pages Section */}
             <div>
-              <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider px-3 mb-3">
+              <div className="text-[11px] font-bold uppercase tracking-wider px-3 mb-3" style={{ color: '#8a9099' }}>
                 Çözüm Merkezleri
               </div>
               <div className="space-y-1">
@@ -552,18 +559,20 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                 {/* Firedrake Çözüm */}
                 <button
                   onClick={() => setActivePage('firedrake')}
-                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
-                    activePage === 'firedrake'
-                      ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
-                      : 'text-slate-400 hover:bg-slate-900 hover:text-slate-200'
-                  }`}
+                  className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium transition-all cursor-pointer"
+                  style={activePage === 'firedrake'
+                    ? { backgroundColor: 'rgba(255,185,56,0.10)', color: '#ffb938', border: '1px solid rgba(255,185,56,0.20)' }
+                    : { color: '#8a9099', border: '1px solid transparent' }
+                  }
+                  onMouseEnter={e => { if (activePage !== 'firedrake') { e.currentTarget.style.backgroundColor = '#22262a'; e.currentTarget.style.color = '#c0c8d0'; } }}
+                  onMouseLeave={e => { if (activePage !== 'firedrake') { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = '#8a9099'; } }}
                 >
                   <span className="flex items-center gap-2.5">
-                    <Flame className="w-4 h-4 text-amber-400" />
+                    <Flame className="w-4 h-4" style={{ color: '#ffb938' }} />
                     <span>Firedrake Çözüm</span>
                   </span>
                   {stats.centers && stats.centers.firedrake > 0 && (
-                    <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/40 text-[10px] font-bold animate-pulse flex items-center gap-1">
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold animate-pulse flex items-center gap-1" style={{ backgroundColor: 'rgba(255,185,56,0.18)', color: '#ffb938', border: '1px solid rgba(255,185,56,0.35)' }}>
                       ⚠️ {stats.centers.firedrake}
                     </span>
                   )}
@@ -572,18 +581,20 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                 {/* Myko Çözüm */}
                 <button
                   onClick={() => setActivePage('myko')}
-                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
-                    activePage === 'myko'
-                      ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20'
-                      : 'text-slate-400 hover:bg-slate-900 hover:text-slate-200'
-                  }`}
+                  className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium transition-all cursor-pointer"
+                  style={activePage === 'myko'
+                    ? { backgroundColor: 'rgba(255,185,56,0.08)', color: '#ffd080', border: '1px solid rgba(255,185,56,0.18)' }
+                    : { color: '#8a9099', border: '1px solid transparent' }
+                  }
+                  onMouseEnter={e => { if (activePage !== 'myko') { e.currentTarget.style.backgroundColor = '#22262a'; e.currentTarget.style.color = '#c0c8d0'; } }}
+                  onMouseLeave={e => { if (activePage !== 'myko') { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = '#8a9099'; } }}
                 >
                   <span className="flex items-center gap-2.5">
-                    <ShieldAlert className="w-4 h-4 text-cyan-400" />
+                    <ShieldAlert className="w-4 h-4" style={{ color: '#ffd080' }} />
                     <span>Myko Çözüm</span>
                   </span>
                   {stats.centers && stats.centers.myko > 0 && (
-                    <span className="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 text-[10px] font-bold animate-pulse flex items-center gap-1">
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold animate-pulse flex items-center gap-1" style={{ backgroundColor: 'rgba(255,208,128,0.15)', color: '#ffd080', border: '1px solid rgba(255,208,128,0.3)' }}>
                       ⚠️ {stats.centers.myko}
                     </span>
                   )}
@@ -592,18 +603,20 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                 {/* Light Farm Çözüm */}
                 <button
                   onClick={() => setActivePage('light-farm')}
-                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
-                    activePage === 'light-farm'
-                      ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                      : 'text-slate-400 hover:bg-slate-900 hover:text-slate-200'
-                  }`}
+                  className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium transition-all cursor-pointer"
+                  style={activePage === 'light-farm'
+                    ? { backgroundColor: 'rgba(52, 211, 153, 0.10)', color: '#34d399', border: '1px solid rgba(52,211,153,0.20)' }
+                    : { color: '#8a9099', border: '1px solid transparent' }
+                  }
+                  onMouseEnter={e => { if (activePage !== 'light-farm') { e.currentTarget.style.backgroundColor = '#22262a'; e.currentTarget.style.color = '#c0c8d0'; } }}
+                  onMouseLeave={e => { if (activePage !== 'light-farm') { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = '#8a9099'; } }}
                 >
                   <span className="flex items-center gap-2.5">
                     <Coins className="w-4 h-4 text-emerald-400" />
                     <span>Light Farm Çözüm</span>
                   </span>
                   {stats.centers && (stats.centers['light-farm'] > 0 || (stats.centers as any).light_farm > 0) && (
-                    <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-[10px] font-bold animate-pulse flex items-center gap-1">
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold animate-pulse flex items-center gap-1" style={{ backgroundColor: 'rgba(52,211,153,0.15)', color: '#34d399', border: '1px solid rgba(52,211,153,0.30)' }}>
                       ⚠️ {stats.centers['light-farm'] || (stats.centers as any).light_farm}
                     </span>
                   )}
@@ -613,19 +626,21 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
 
             {/* General System Nav */}
             <div>
-              <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider px-3 mb-3">
+              <div className="text-[11px] font-bold uppercase tracking-wider px-3 mb-3" style={{ color: '#8a9099' }}>
                 Genel Yönetim
               </div>
               <nav className="space-y-1">
                 <button
                   onClick={() => { setActivePage('dashboard'); fetchStats(); }}
-                  className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
-                    activePage === 'dashboard'
-                      ? 'bg-slate-800/80 text-white border border-slate-700'
-                      : 'text-slate-400 hover:bg-slate-900 hover:text-slate-200'
-                  }`}
+                  className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium transition-all cursor-pointer"
+                  style={activePage === 'dashboard'
+                    ? { backgroundColor: 'rgba(52,58,64,0.7)', color: '#fff', border: '1px solid #3f4750' }
+                    : { color: '#8a9099', border: '1px solid transparent' }
+                  }
+                  onMouseEnter={e => { if (activePage !== 'dashboard') { e.currentTarget.style.backgroundColor = '#22262a'; e.currentTarget.style.color = '#c0c8d0'; } }}
+                  onMouseLeave={e => { if (activePage !== 'dashboard') { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = '#8a9099'; } }}
                 >
-                  <TrendingUp className="w-4 h-4 text-amber-400" />
+                  <TrendingUp className="w-4 h-4" style={{ color: '#ffb938' }} />
                   <span>Genel Bakış</span>
                 </button>
 
@@ -634,25 +649,29 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                   <>
                     <button
                       onClick={() => setActivePage('users')}
-                      className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
-                        activePage === 'users'
-                          ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
-                          : 'text-slate-400 hover:bg-slate-900 hover:text-slate-200'
-                      }`}
+                      className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium transition-all cursor-pointer"
+                      style={activePage === 'users'
+                        ? { backgroundColor: 'rgba(255,185,56,0.10)', color: '#ffb938', border: '1px solid rgba(255,185,56,0.20)' }
+                        : { color: '#8a9099', border: '1px solid transparent' }
+                      }
+                      onMouseEnter={e => { if (activePage !== 'users') { e.currentTarget.style.backgroundColor = '#22262a'; e.currentTarget.style.color = '#c0c8d0'; } }}
+                      onMouseLeave={e => { if (activePage !== 'users') { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = '#8a9099'; } }}
                     >
-                      <Users className="w-4 h-4 text-amber-400" />
+                      <Users className="w-4 h-4" style={{ color: '#ffb938' }} />
                       <span>Oyuncu & GM Listesi</span>
                     </button>
 
                     <button
                       onClick={() => setActivePage('reports')}
-                      className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
-                        activePage === 'reports'
-                          ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
-                          : 'text-slate-400 hover:bg-slate-900 hover:text-slate-200'
-                      }`}
+                      className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium transition-all cursor-pointer"
+                      style={activePage === 'reports'
+                        ? { backgroundColor: 'rgba(255,185,56,0.10)', color: '#ffb938', border: '1px solid rgba(255,185,56,0.20)' }
+                        : { color: '#8a9099', border: '1px solid transparent' }
+                      }
+                      onMouseEnter={e => { if (activePage !== 'reports') { e.currentTarget.style.backgroundColor = '#22262a'; e.currentTarget.style.color = '#c0c8d0'; } }}
+                      onMouseLeave={e => { if (activePage !== 'reports') { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = '#8a9099'; } }}
                     >
-                      <BarChart3 className="w-4 h-4 text-amber-400" />
+                      <BarChart3 className="w-4 h-4" style={{ color: '#ffb938' }} />
                       <span>Yetkili Performans Raporu</span>
                     </button>
                   </>
@@ -661,13 +680,15 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                 {/* Site Ayarları & DB Optimizasyonu (En Altta) */}
                 <button
                   onClick={() => setActivePage('settings')}
-                  className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
-                    activePage === 'settings'
-                      ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
-                      : 'text-slate-400 hover:bg-slate-900 hover:text-slate-200'
-                  }`}
+                  className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium transition-all cursor-pointer"
+                  style={activePage === 'settings'
+                    ? { backgroundColor: 'rgba(255,185,56,0.10)', color: '#ffb938', border: '1px solid rgba(255,185,56,0.20)' }
+                    : { color: '#8a9099', border: '1px solid transparent' }
+                  }
+                  onMouseEnter={e => { if (activePage !== 'settings') { e.currentTarget.style.backgroundColor = '#22262a'; e.currentTarget.style.color = '#c0c8d0'; } }}
+                  onMouseLeave={e => { if (activePage !== 'settings') { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = '#8a9099'; } }}
                 >
-                  <Settings className="w-4 h-4 text-amber-400" />
+                  <Settings className="w-4 h-4" style={{ color: '#ffb938' }} />
                   <span>Site Ayarları</span>
                 </button>
               </nav>
@@ -675,8 +696,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
           </div>
 
           {/* Super Admin / Role Status Footer */}
-          <div className="p-3 rounded-2xl bg-gradient-to-b from-amber-500/10 to-transparent border border-amber-500/20 text-left">
-            <div className="flex items-center gap-2 text-amber-400 text-xs font-bold mb-1">
+          <div className="p-3 rounded-2xl text-left" style={{ background: 'linear-gradient(to bottom, rgba(255,185,56,0.08), transparent)', border: '1px solid rgba(255,185,56,0.18)' }}>
+            <div className="flex items-center gap-2 text-xs font-bold mb-1" style={{ color: '#ffb938' }}>
               <Sparkles className="w-3.5 h-3.5" />
               <span>{user.role === 'super_admin' ? 'Süper Admin Modu' : user.role === 'admin' ? 'Db Editör Modu' : 'Game Master Modu'}</span>
             </div>
@@ -698,10 +719,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                 
                 {/* 1. Toplam Çözülen Card */}
-                <div className="p-5 rounded-3xl bg-slate-900/70 border border-slate-800 backdrop-blur-sm space-y-3 relative overflow-hidden group hover:border-emerald-500/40 transition-all">
+                <div className="p-5 rounded-3xl backdrop-blur-sm space-y-3 relative overflow-hidden group transition-all" style={{ backgroundColor: 'rgba(34,38,42,0.7)', border: '1px solid #343a40' }} onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(52,211,153,0.4)')} onMouseLeave={e => (e.currentTarget.style.borderColor = '#343a40')}>
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-semibold text-slate-400">Toplam Çözülen</span>
-                    <div className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    <div className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-400" style={{ border: '1px solid rgba(52,211,153,0.2)' }}>
                       <CheckCircle2 className="w-5 h-5" />
                     </div>
                   </div>
@@ -710,31 +731,31 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                 </div>
 
                 {/* 2. Bekleyen Sorunlar Card */}
-                <div className="p-5 rounded-3xl bg-slate-900/70 border border-slate-800 backdrop-blur-sm space-y-3 relative overflow-hidden group hover:border-amber-500/40 transition-all">
+                <div className="p-5 rounded-3xl backdrop-blur-sm space-y-3 relative overflow-hidden group transition-all" style={{ backgroundColor: 'rgba(34,38,42,0.7)', border: '1px solid #343a40' }} onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(255,185,56,0.4)')} onMouseLeave={e => (e.currentTarget.style.borderColor = '#343a40')}>
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-semibold text-slate-400">Bekleyen Sorunlar</span>
-                    <div className="p-2.5 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                    <div className="p-2.5 rounded-xl" style={{ backgroundColor: 'rgba(255,185,56,0.10)', color: '#ffb938', border: '1px solid rgba(255,185,56,0.20)' }}>
                       <Clock className="w-5 h-5" />
                     </div>
                   </div>
                   <div className="text-3xl font-extrabold text-white tracking-tight">{stats.pending}</div>
-                  <div className="text-[11px] text-amber-400 font-medium">İnceleme bekleyen açık talepler</div>
+                  <div className="text-[11px] font-medium" style={{ color: '#ffb938' }}>İnceleme bekleyen açık talepler</div>
                 </div>
 
                 {/* 3. İşlemde Olan Card */}
-                <div className="p-5 rounded-3xl bg-slate-900/70 border border-slate-800 backdrop-blur-sm space-y-3 relative overflow-hidden group hover:border-cyan-500/40 transition-all">
+                <div className="p-5 rounded-3xl backdrop-blur-sm space-y-3 relative overflow-hidden group transition-all" style={{ backgroundColor: 'rgba(34,38,42,0.7)', border: '1px solid #343a40' }} onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(255,208,128,0.4)')} onMouseLeave={e => (e.currentTarget.style.borderColor = '#343a40')}>
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-semibold text-slate-400">İşlemde Olanlar</span>
-                    <div className="p-2.5 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                    <div className="p-2.5 rounded-xl" style={{ backgroundColor: 'rgba(255,208,128,0.10)', color: '#ffd080', border: '1px solid rgba(255,208,128,0.20)' }}>
                       <RefreshCw className="w-5 h-5" />
                     </div>
                   </div>
                   <div className="text-3xl font-extrabold text-white tracking-tight">{stats.in_progress}</div>
-                  <div className="text-[11px] text-cyan-400 font-medium">Yetkili tarafından incelenenler</div>
+                  <div className="text-[11px] font-medium" style={{ color: '#ffd080' }}>Yetkili tarafından incelenenler</div>
                 </div>
 
                 {/* 4. İptal Edilen / Kapatılan Card */}
-                <div className="p-5 rounded-3xl bg-slate-900/70 border border-slate-800 backdrop-blur-sm space-y-3 relative overflow-hidden group hover:border-red-500/40 transition-all">
+                <div className="p-5 rounded-3xl backdrop-blur-sm space-y-3 relative overflow-hidden group transition-all" style={{ backgroundColor: 'rgba(34,38,42,0.7)', border: '1px solid #343a40' }} onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(239,68,68,0.4)')} onMouseLeave={e => (e.currentTarget.style.borderColor = '#343a40')}>
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-semibold text-slate-400">İptal Edilen / Kapatılan</span>
                     <div className="p-2.5 rounded-xl bg-red-500/10 text-red-400 border border-red-500/20">
@@ -754,34 +775,43 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                   
                   <div 
                     onClick={() => setActivePage('firedrake')}
-                    className="p-6 rounded-3xl bg-slate-900/60 border border-slate-800 hover:border-amber-500/50 transition-all cursor-pointer space-y-3 group"
+                    className="p-6 rounded-3xl transition-all cursor-pointer space-y-3 group"
+                    style={{ backgroundColor: 'rgba(34,38,42,0.6)', border: '1px solid #343a40' }}
+                    onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(255,185,56,0.45)')}
+                    onMouseLeave={e => (e.currentTarget.style.borderColor = '#343a40')}
                   >
-                    <div className="p-3.5 rounded-2xl bg-amber-500/10 text-amber-400 w-fit border border-amber-500/20 group-hover:scale-110 transition-transform">
+                    <div className="p-3.5 rounded-2xl w-fit group-hover:scale-110 transition-transform" style={{ backgroundColor: 'rgba(255,185,56,0.10)', color: '#ffb938', border: '1px solid rgba(255,185,56,0.20)' }}>
                       <Flame className="w-6 h-6" />
                     </div>
-                    <h3 className="text-lg font-bold text-white group-hover:text-amber-400 transition-colors">Firedrake Çözüm</h3>
+                    <h3 className="text-lg font-bold text-white transition-colors" style={{}} onMouseEnter={undefined}>Firedrake Çözüm</h3>
                     <p className="text-xs text-slate-400">Firedrake sunucusuna özel sorun bildirimleri ve yetkili talepleri.</p>
                   </div>
 
                   <div 
                     onClick={() => setActivePage('myko')}
-                    className="p-6 rounded-3xl bg-slate-900/60 border border-slate-800 hover:border-cyan-500/50 transition-all cursor-pointer space-y-3 group"
+                    className="p-6 rounded-3xl transition-all cursor-pointer space-y-3 group"
+                    style={{ backgroundColor: 'rgba(34,38,42,0.6)', border: '1px solid #343a40' }}
+                    onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(255,208,128,0.40)')}
+                    onMouseLeave={e => (e.currentTarget.style.borderColor = '#343a40')}
                   >
-                    <div className="p-3.5 rounded-2xl bg-cyan-500/10 text-cyan-400 w-fit border border-cyan-500/20 group-hover:scale-110 transition-transform">
+                    <div className="p-3.5 rounded-2xl w-fit group-hover:scale-110 transition-transform" style={{ backgroundColor: 'rgba(255,208,128,0.10)', color: '#ffd080', border: '1px solid rgba(255,208,128,0.20)' }}>
                       <ShieldAlert className="w-6 h-6" />
                     </div>
-                    <h3 className="text-lg font-bold text-white group-hover:text-cyan-400 transition-colors">Myko Çözüm</h3>
+                    <h3 className="text-lg font-bold text-white transition-colors">Myko Çözüm</h3>
                     <p className="text-xs text-slate-400">Myko sunucusuna özel sorun bildirimleri ve KC/hesap talepleri.</p>
                   </div>
 
                   <div 
                     onClick={() => setActivePage('light-farm')}
-                    className="p-6 rounded-3xl bg-slate-900/60 border border-slate-800 hover:border-emerald-500/50 transition-all cursor-pointer space-y-3 group"
+                    className="p-6 rounded-3xl transition-all cursor-pointer space-y-3 group"
+                    style={{ backgroundColor: 'rgba(34,38,42,0.6)', border: '1px solid #343a40' }}
+                    onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(52,211,153,0.40)')}
+                    onMouseLeave={e => (e.currentTarget.style.borderColor = '#343a40')}
                   >
-                    <div className="p-3.5 rounded-2xl bg-emerald-500/10 text-emerald-400 w-fit border border-emerald-500/20 group-hover:scale-110 transition-transform">
+                    <div className="p-3.5 rounded-2xl w-fit group-hover:scale-110 transition-transform" style={{ backgroundColor: 'rgba(52,211,153,0.10)', color: '#34d399', border: '1px solid rgba(52,211,153,0.20)' }}>
                       <Coins className="w-6 h-6" />
                     </div>
-                    <h3 className="text-lg font-bold text-white group-hover:text-emerald-400 transition-colors">Light Farm Çözüm</h3>
+                    <h3 className="text-lg font-bold text-white transition-colors">Light Farm Çözüm</h3>
                     <p className="text-xs text-slate-400">Light Farm sunucusuna özel teknik ve zindan sorun bildirimleri.</p>
                   </div>
 
@@ -839,10 +869,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
 
       {/* SAĞ ALT CANLI SESLİ BİLDİRİM TOAST POP-UP */}
       {liveToast && liveToast.show && (
-        <div className="fixed bottom-6 right-6 z-50 max-w-sm w-full bg-slate-900 border-2 border-amber-500/80 rounded-2xl shadow-2xl p-4 space-y-2 animate-bounce flex flex-col justify-between backdrop-blur-md">
+        <div className="fixed bottom-6 right-6 z-50 max-w-sm w-full rounded-2xl shadow-2xl p-4 space-y-2 animate-bounce flex flex-col justify-between backdrop-blur-md" style={{ backgroundColor: '#22262a', border: '2px solid rgba(255,185,56,0.75)' }}>
           <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-            <div className="flex items-center gap-2 text-amber-400 font-extrabold text-xs">
-              <Bell className="w-4 h-4 text-amber-400 animate-ring" />
+            <div className="flex items-center gap-2 font-extrabold text-xs" style={{ color: '#ffb938' }}>
+              <Bell className="w-4 h-4 animate-ring" style={{ color: '#ffb938' }} />
               <span>{liveToast.title}</span>
             </div>
             <button 
@@ -857,7 +887,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
             {liveToast.message}
           </p>
 
-          <div className="text-[10px] text-amber-400/80 font-bold flex items-center gap-1 pt-1">
+          <div className="text-[10px] font-bold flex items-center gap-1 pt-1" style={{ color: 'rgba(255,185,56,0.75)' }}>
             <span>🔊 3 Defa Bildirim Sesi Çalındı</span>
           </div>
         </div>
