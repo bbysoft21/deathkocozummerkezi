@@ -340,7 +340,7 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
 
   const getCardClass = (t: Ticket, defaultBorderHover: string, extraCursor: string = 'cursor-grab active:cursor-grabbing') => {
     if (isUpdateCategory(t)) {
-      return `p-5 rounded-3xl bg-gradient-to-r from-purple-950/70 via-[#22262a] to-indigo-950/70 border-2 border-purple-500/60 hover:border-purple-400 transition-all duration-200 ${extraCursor} flex flex-col justify-between space-y-4 group hover:shadow-xl hover:shadow-purple-500/20 relative overflow-hidden`;
+      return `p-5 rounded-3xl bg-gradient-to-br from-red-950/85 via-[#25191c] to-rose-950/85 border-2 border-red-500/60 hover:border-red-400 transition-all duration-200 ${extraCursor} flex flex-col justify-between space-y-4 group hover:shadow-2xl hover:shadow-red-500/25 relative overflow-hidden`;
     }
     return `p-5 rounded-3xl bg-[#22262a]/70 border border-[#2a2f34] ${defaultBorderHover} transition-all duration-200 ${extraCursor} flex flex-col justify-between space-y-4 group hover:shadow-xl relative overflow-hidden`;
   };
@@ -349,7 +349,7 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
     if (!t.category) return <span />;
     if (isUpdateCategory(t)) {
       return (
-        <span className="px-2.5 py-0.5 rounded-md bg-purple-500/25 text-purple-300 text-[10px] border border-purple-500/40 font-extrabold uppercase flex items-center gap-1 shadow-sm">
+        <span className="px-2.5 py-0.5 rounded-md bg-red-500/20 text-red-300 text-[10px] border border-red-500/40 font-extrabold uppercase flex items-center gap-1 shadow-sm shadow-red-950/50">
           ⚡ {t.category.name}
         </span>
       );
