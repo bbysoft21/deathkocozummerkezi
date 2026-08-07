@@ -895,7 +895,7 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
                   />
                   {imagePreview ? (
                     <div className="flex items-center justify-between gap-3">
-                      <img src={imagePreview} alt="Önizleme" className="w-16 h-16 object-cover rounded-lg border border-slate-700" />
+                      <img src={imagePreview} alt="Önizleme" className="w-16 h-16 object-cover rounded-lg border border-[#343a40]" />
                       <div className="text-left flex-1">
                         <span className="text-xs font-semibold text-white block truncate">{selectedFile?.name}</span>
                         <span className="text-[10px] text-slate-500 block">Değiştirmek için tıklayın</span>
@@ -1057,7 +1057,7 @@ export const SolutionCenterView: React.FC<SolutionCenterViewProps> = ({
 
               <button
                 onClick={() => setSelectedTicket(null)}
-                className="px-4 py-2 rounded-xl bg-[#2a2f34] text-slate-300 text-xs font-semibold cursor-pointer hover:bg-slate-700"
+                className="px-4 py-2 rounded-xl bg-[#2a2f34] text-slate-300 text-xs font-semibold cursor-pointer hover:bg-[#343a40]"
               >
                 Kapat
               </button>

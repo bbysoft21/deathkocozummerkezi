@@ -423,14 +423,14 @@ export const UserManagementView: React.FC<UserManagementViewProps> = ({ currentU
                       <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => openEditModal(u)}
-                          className="p-2 rounded-xl bg-slate-800 hover:bg-amber-500/20 text-slate-300 hover:text-amber-400 border border-slate-700 transition-all cursor-pointer"
+                          className="p-2 rounded-xl bg-[#2a2f34] hover:bg-amber-500/20 text-slate-300 hover:text-amber-400 border border-[#343a40] transition-all cursor-pointer"
                           title="Kullanıcıyı Düzenle"
                         >
                           <Edit3 className="w-3.5 h-3.5" />
                         </button>
                         <button
                           onClick={() => handleDeleteUser(u)}
-                          className="p-2 rounded-xl bg-slate-800 hover:bg-rose-500/20 text-slate-300 hover:text-rose-400 border border-slate-700 transition-all cursor-pointer"
+                          className="p-2 rounded-xl bg-[#2a2f34] hover:bg-rose-500/20 text-slate-300 hover:text-rose-400 border border-[#343a40] transition-all cursor-pointer"
                           title="Kullanıcıyı Sil"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -448,11 +448,11 @@ export const UserManagementView: React.FC<UserManagementViewProps> = ({ currentU
 
       {/* CREATE & EDIT MODAL */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-          <div className="w-full max-w-xl bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 z-50 bg-[#1a1d1e]/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+          <div className="w-full max-w-xl bg-[#22262a] border border-[#2a2f34] rounded-3xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
             
             {/* Modal Header */}
-            <div className="p-6 border-b border-slate-800 flex items-center justify-between bg-slate-950/60">
+            <div className="p-6 border-b border-[#2a2f34] flex items-center justify-between bg-[#1a1d1e]/60">
               <div className="flex items-center gap-3">
                 <div className="p-2.5 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-500/30">
                   {editingUser ? <Edit3 className="w-5 h-5" /> : <UserPlus className="w-5 h-5" />}
@@ -469,7 +469,7 @@ export const UserManagementView: React.FC<UserManagementViewProps> = ({ currentU
 
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
+                className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-[#2a2f34] transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -503,7 +503,7 @@ export const UserManagementView: React.FC<UserManagementViewProps> = ({ currentU
                   <img
                     src={formData.avatar || PRESET_AVATARS[0]}
                     alt="Preview"
-                    className="w-14 h-14 rounded-2xl object-cover border-2 border-amber-500/50 shadow-lg bg-slate-950 shrink-0"
+                    className="w-14 h-14 rounded-2xl object-cover border-2 border-amber-500/50 shadow-lg bg-[#1a1d1e] shrink-0"
                   />
                   <div className="space-y-2 flex-1">
                     <div className="text-[11px] text-slate-400">Hazır Avatarlardan Seçin:</div>
@@ -528,7 +528,7 @@ export const UserManagementView: React.FC<UserManagementViewProps> = ({ currentU
                   value={formData.avatar}
                   onChange={(e) => setFormData({ ...formData, avatar: e.target.value })}
                   placeholder="Veya Özel Görsel URL Adresi Yapıştırın..."
-                  className="w-full mt-2 px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-200 focus:outline-none focus:border-amber-500/50"
+                  className="w-full mt-2 px-4 py-2.5 rounded-xl bg-[#1a1d1e] border border-[#2a2f34] text-xs text-slate-200 focus:outline-none focus:border-amber-500/50"
                 />
               </div>
 
@@ -545,7 +545,7 @@ export const UserManagementView: React.FC<UserManagementViewProps> = ({ currentU
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder="Örn: GM_Firedrake"
-                    className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-200 focus:outline-none focus:border-amber-500/50"
+                    className="w-full px-4 py-2.5 rounded-xl bg-[#1a1d1e] border border-[#2a2f34] text-xs text-slate-200 focus:outline-none focus:border-amber-500/50"
                   />
                 </div>
 
@@ -560,7 +560,7 @@ export const UserManagementView: React.FC<UserManagementViewProps> = ({ currentU
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder="gm@deathko.com"
-                    className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-200 focus:outline-none focus:border-amber-500/50"
+                    className="w-full px-4 py-2.5 rounded-xl bg-[#1a1d1e] border border-[#2a2f34] text-xs text-slate-200 focus:outline-none focus:border-amber-500/50"
                   />
                 </div>
               </div>
@@ -577,7 +577,7 @@ export const UserManagementView: React.FC<UserManagementViewProps> = ({ currentU
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   placeholder={editingUser ? '••••••••' : 'Minimum 6 karakter şifre girin'}
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-200 focus:outline-none focus:border-amber-500/50"
+                  className="w-full px-4 py-2.5 rounded-xl bg-[#1a1d1e] border border-[#2a2f34] text-xs text-slate-200 focus:outline-none focus:border-amber-500/50"
                 />
               </div>
 
@@ -637,7 +637,7 @@ export const UserManagementView: React.FC<UserManagementViewProps> = ({ currentU
                       className={`p-3.5 rounded-2xl border cursor-pointer transition-all space-y-1.5 relative overflow-hidden ${
                         formData.role === roleOption.id
                           ? 'bg-amber-500/10 border-amber-500/60 ring-1 ring-amber-500/30'
-                          : 'bg-slate-950/60 border-slate-800 hover:border-slate-700'
+                          : 'bg-[#1a1d1e]/60 border-[#2a2f34] hover:border-[#343a40]'
                       }`}
                     >
                       <div className="flex items-center justify-between">
@@ -676,11 +676,11 @@ export const UserManagementView: React.FC<UserManagementViewProps> = ({ currentU
               </div>
 
               {/* Submit Controls */}
-              <div className="pt-4 border-t border-slate-800 flex items-center justify-end gap-3">
+              <div className="pt-4 border-t border-[#2a2f34] flex items-center justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2.5 rounded-xl bg-slate-800 text-slate-300 hover:text-white text-xs font-bold transition-all cursor-pointer"
+                  className="px-4 py-2.5 rounded-xl bg-[#2a2f34] text-slate-300 hover:text-white text-xs font-bold transition-all cursor-pointer"
                 >
                   İptal
                 </button>

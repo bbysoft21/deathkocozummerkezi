@@ -155,7 +155,7 @@ export const PerformanceReportView: React.FC<PerformanceReportViewProps> = ({ cu
     <div className="p-6 md:p-8 max-w-7xl mx-auto space-y-8">
       
       {/* Header Banner */}
-      <div className="relative overflow-hidden p-6 rounded-3xl bg-gradient-to-r from-slate-900 via-slate-900/90 to-amber-950/40 border border-slate-800 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div className="relative overflow-hidden p-6 rounded-3xl bg-gradient-to-r from-[#22262a] via-[#22262a]/90 to-amber-950/40 border border-[#2a2f34] shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="space-y-2 z-10">
           <div className="flex items-center gap-3">
             <div className="p-2.5 rounded-2xl bg-amber-500/20 border border-amber-500/40 text-amber-400">
@@ -173,7 +173,7 @@ export const PerformanceReportView: React.FC<PerformanceReportViewProps> = ({ cu
       </div>
 
       {/* Person Based Filter Control Bar */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-2xl bg-slate-900/60 border border-slate-800">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-2xl bg-[#22262a]/60 border border-[#2a2f34]">
         <div className="flex items-center gap-2">
           <span className="text-xs font-extrabold text-white">Kişi Bazlı Rapor Filtresi:</span>
           <span className="text-[11px] text-slate-400">Performansı incelenecek yetkiliyi seçin</span>
@@ -182,7 +182,7 @@ export const PerformanceReportView: React.FC<PerformanceReportViewProps> = ({ cu
         <select
           value={selectedStaffId}
           onChange={(e) => setSelectedStaffId(e.target.value)}
-          className="w-full sm:w-72 px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs font-semibold text-amber-400 focus:outline-none focus:border-amber-500 transition-all cursor-pointer"
+          className="w-full sm:w-72 px-4 py-2.5 rounded-xl bg-[#1a1d1e] border border-[#2a2f34] text-xs font-semibold text-amber-400 focus:outline-none focus:border-amber-500 transition-all cursor-pointer"
         >
           <option value="all">👥 Tüm Yetkililer Raporu (Genel)</option>
           {staffAnalytics.map((s) => (
@@ -218,7 +218,7 @@ export const PerformanceReportView: React.FC<PerformanceReportViewProps> = ({ cu
               {filteredStaffAnalytics.map((staff) => (
                 <div 
                   key={staff.user.id} 
-                  className="p-5 rounded-3xl bg-slate-900/80 border border-slate-800 space-y-4 relative overflow-hidden shadow-xl hover:border-slate-700 transition-all"
+                  className="p-5 rounded-3xl bg-[#22262a]/80 border border-[#2a2f34] space-y-4 relative overflow-hidden shadow-xl hover:border-[#343a40] transition-all"
                 >
                   {/* User Badge Top */}
                   <div className="flex items-center justify-between">
@@ -226,7 +226,7 @@ export const PerformanceReportView: React.FC<PerformanceReportViewProps> = ({ cu
                       <img
                         src={staff.user.avatar || 'https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=150&auto=format&fit=crop&q=80'}
                         alt={staff.user.name}
-                        className="w-10 h-10 rounded-2xl object-cover border border-amber-500/30 shadow-md bg-slate-950"
+                        className="w-10 h-10 rounded-2xl object-cover border border-amber-500/30 shadow-md bg-[#1a1d1e]"
                       />
                       <div>
                         <h3 className="text-sm font-extrabold text-white">{staff.user.name}</h3>
@@ -246,7 +246,7 @@ export const PerformanceReportView: React.FC<PerformanceReportViewProps> = ({ cu
                         <ArrowDownRight className="w-4 h-4" /> Geriliyor
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-slate-800 text-slate-400">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-[#2a2f34] text-slate-400">
                         <Minus className="w-4 h-4" /> Sabit
                       </span>
                     )}
@@ -255,14 +255,14 @@ export const PerformanceReportView: React.FC<PerformanceReportViewProps> = ({ cu
                   {/* Weekly & Monthly Stat Grids */}
                   <div className="grid grid-cols-2 gap-3 pt-2">
                     {/* Bu Hafta Çözülen */}
-                    <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800/80 space-y-1">
+                    <div className="p-3 rounded-2xl bg-[#1a1d1e] border border-[#2a2f34]/80 space-y-1">
                       <span className="text-[10px] text-slate-400 block font-medium">Bu Hafta Çözülen</span>
                       <div className="text-lg font-black text-emerald-400">{staff.this_week_resolved_count} Sorun</div>
                       <span className="text-[9px] text-slate-500 block">Ort: {formatMinutes(staff.this_week_avg_minutes)}</span>
                     </div>
 
                     {/* Geçen Hafta Çözülen */}
-                    <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800/80 space-y-1">
+                    <div className="p-3 rounded-2xl bg-[#1a1d1e] border border-[#2a2f34]/80 space-y-1">
                       <span className="text-[10px] text-slate-400 block font-medium">Geçen Hafta</span>
                       <div className="text-lg font-black text-slate-300">{staff.last_week_resolved_count} Sorun</div>
                       <span className="text-[9px] text-slate-500 block">Ort: {formatMinutes(staff.last_week_avg_minutes)}</span>
@@ -270,7 +270,7 @@ export const PerformanceReportView: React.FC<PerformanceReportViewProps> = ({ cu
                   </div>
 
                   {/* Monthly Summary Bar */}
-                  <div className="p-3 rounded-2xl bg-slate-950/60 border border-slate-800/60 flex items-center justify-between text-xs">
+                  <div className="p-3 rounded-2xl bg-[#1a1d1e]/60 border border-[#2a2f34]/60 flex items-center justify-between text-xs">
                     <span className="text-slate-400 font-medium">Bu Ay Toplam Çözülen:</span>
                     <span className="font-extrabold text-amber-400">{staff.this_month_resolved_count} Konu ({formatMinutes(staff.this_month_avg_minutes)} ort.)</span>
                   </div>
@@ -287,10 +287,10 @@ export const PerformanceReportView: React.FC<PerformanceReportViewProps> = ({ cu
               Sorun Bazlı Süre Takibi ve Zaman Günlükleri
             </h2>
 
-            <div className="bg-slate-900/60 border border-slate-800/80 rounded-3xl overflow-hidden shadow-xl">
+            <div className="bg-[#22262a]/60 border border-[#2a2f34]/80 rounded-3xl overflow-hidden shadow-xl">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs text-slate-300">
-                  <thead className="bg-slate-950/80 border-b border-slate-800 text-slate-400 uppercase tracking-wider font-extrabold text-[10px]">
+                  <thead className="bg-[#1a1d1e]/80 border-b border-[#2a2f34] text-slate-400 uppercase tracking-wider font-extrabold text-[10px]">
                     <tr>
                       <th className="py-4 px-6">Sorun Konusu</th>
                       <th className="py-4 px-4">Atanan Yetkili</th>
@@ -303,7 +303,7 @@ export const PerformanceReportView: React.FC<PerformanceReportViewProps> = ({ cu
                   </thead>
                   <tbody className="divide-y divide-slate-800/60">
                     {filteredLogs.map((log) => (
-                      <tr key={log.id} className="hover:bg-slate-800/30 transition-colors">
+                      <tr key={log.id} className="hover:bg-[#2a2f34]/30 transition-colors">
                         
                         {/* Subject */}
                         <td className="py-4 px-6 font-extrabold text-white">
@@ -315,7 +315,7 @@ export const PerformanceReportView: React.FC<PerformanceReportViewProps> = ({ cu
                           {log.assigned_to ? (
                             <div className="flex items-center gap-2">
                               <span className="font-bold text-amber-400">{log.assigned_to.name}</span>
-                              <span className="text-[9px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-400">
+                              <span className="text-[9px] px-1.5 py-0.5 rounded bg-[#2a2f34] text-slate-400">
                                 {getRoleLabel(log.assigned_to.role)}
                               </span>
                             </div>
@@ -379,7 +379,7 @@ export const PerformanceReportView: React.FC<PerformanceReportViewProps> = ({ cu
           <div className="space-y-4 pt-4">
             <button
               onClick={() => setIsGmSectionOpen(!isGmSectionOpen)}
-              className="w-full flex items-center justify-between p-4 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-amber-500/50 transition-all cursor-pointer group shadow-lg"
+              className="w-full flex items-center justify-between p-4 rounded-2xl bg-[#22262a]/80 border border-[#2a2f34] hover:border-amber-500/50 transition-all cursor-pointer group shadow-lg"
             >
               <div className="flex items-center gap-3">
                 <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 group-hover:scale-105 transition-transform">
@@ -388,7 +388,7 @@ export const PerformanceReportView: React.FC<PerformanceReportViewProps> = ({ cu
                 <div className="text-left">
                   <h2 className="text-sm font-extrabold text-white group-hover:text-amber-400 transition-colors flex items-center gap-2">
                     Game Master (GM) Konu Açma Analizi (Haftalık & Aylık)
-                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 font-normal">
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#2a2f34] text-slate-400 font-normal">
                       {gmAnalytics.length} GM Kayıtlı
                     </span>
                   </h2>
@@ -403,10 +403,10 @@ export const PerformanceReportView: React.FC<PerformanceReportViewProps> = ({ cu
             </button>
 
             {isGmSectionOpen && (
-              <div className="bg-slate-900/60 border border-slate-800/80 rounded-3xl overflow-hidden shadow-xl animate-in fade-in zoom-in-95 duration-200">
+              <div className="bg-[#22262a]/60 border border-[#2a2f34]/80 rounded-3xl overflow-hidden shadow-xl animate-in fade-in zoom-in-95 duration-200">
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-xs text-slate-300">
-                    <thead className="bg-slate-950/80 border-b border-slate-800 text-slate-400 uppercase tracking-wider font-extrabold text-[10px]">
+                    <thead className="bg-[#1a1d1e]/80 border-b border-[#2a2f34] text-slate-400 uppercase tracking-wider font-extrabold text-[10px]">
                       <tr>
                         <th className="py-4 px-6">Game Master</th>
                         <th className="py-4 px-4">Bu Hafta Açtığı Konu</th>
@@ -422,7 +422,7 @@ export const PerformanceReportView: React.FC<PerformanceReportViewProps> = ({ cu
                         </tr>
                       ) : (
                         gmAnalytics.map((gm) => (
-                          <tr key={gm.user.id} className="hover:bg-slate-800/30 transition-colors">
+                          <tr key={gm.user.id} className="hover:bg-[#2a2f34]/30 transition-colors">
                             <td className="py-4 px-6">
                               <div className="flex items-center gap-3">
                                 <img
